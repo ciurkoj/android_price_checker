@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.home
+package com.example.pricechecker.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapplication.R
+import com.example.pricechecker.R
 
 class HomeFragment : Fragment() {
 

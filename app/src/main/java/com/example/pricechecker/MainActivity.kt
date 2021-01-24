@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.pricechecker
 
 import android.os.Bundle
 import android.view.Menu
