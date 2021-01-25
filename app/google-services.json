@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1054899461191",
+    "project_id": "price-checker-22de1",
+    "storage_bucket": "price-checker-22de1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054899461191:android:7cfbf5c303c69d745b6562",
+        "android_client_info": {
+          "package_name": "com.example.pricechecker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054899461191-4rur05r33ee4ihgus7i0ikq7gnuce5ve.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pricechecker",
+            "certificate_hash": "0f2e2a63595168d4f07604f33144728e5ef5df1f"
+          }
+        },
+        {
+          "client_id": "1054899461191-lgdtoipgs5rebso99jm15ingo266rtn0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBui4YyMEQ9nXJY-BLWoycjzvdk-022dcE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054899461191-lgdtoipgs5rebso99jm15ingo266rtn0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
