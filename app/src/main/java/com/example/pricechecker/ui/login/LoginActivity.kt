@@ -17,27 +17,37 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import com.example.pricechecker.R
 import com.example.pricechecker.RegisterActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
+
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_login)
 
+        auth = FirebaseAuth.getInstance()
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
-        val register = findViewById<Button>(R.id.register)
+        val signup = findViewById<Button>(R.id.signup)
 
-        register.setOnClickListener {
+        signup.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
+//        register.setOnClickListener {
+//            startActivity(Intent(this,RegisterActivity::class.java))
+//            finish()
+//        }
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
@@ -102,6 +112,16 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
         }
+    }
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        updateUI(currentUser)
+    }
+
+    fun updateUI(currentUser: FirebaseUser?) {
+
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
