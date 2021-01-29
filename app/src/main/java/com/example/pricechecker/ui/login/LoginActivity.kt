@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.example.pricechecker.MainActivity
 import com.example.pricechecker.R
 import com.example.pricechecker.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -44,10 +46,36 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
-//        register.setOnClickListener {
-//            startActivity(Intent(this,RegisterActivity::class.java))
+        val currentuser = auth.currentUser
+        if (currentuser != null) {
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(intent)
 //            finish()
-//        }
+        }
+        login.setOnClickListener {
+
+            if(TextUtils.isEmpty(username.text.toString())){
+                username.setError("Please enter username")
+                return@setOnClickListener
+            }
+            else if(TextUtils.isEmpty(password.text.toString())){
+                username.setError("Please enter password")
+                return@setOnClickListener
+            }
+            auth.signInWithEmailAndPassword(username.text.toString(), password.text.toString())
+                    .addOnCompleteListener {
+                        if(it.isSuccessful) {
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                            startActivity(intent)
+//                            finish()
+                        } else {
+                            Toast.makeText(this@LoginActivity, "Login failed, please try again! ", Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+        }
+
+
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
             .get(LoginViewModel::class.java)
 
@@ -113,16 +141,13 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
-    }
 
-    fun updateUI(currentUser: FirebaseUser?) {
 
-    }
+//    login.setOnClickListener {
+//        startActivity(Intent(this, MainActivity::class.java))
+//        startActivity(intent)
+//    }
+
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
