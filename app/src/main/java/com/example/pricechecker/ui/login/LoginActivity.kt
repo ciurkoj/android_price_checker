@@ -17,21 +17,18 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.example.pricechecker.MainActivity
+
 import com.example.pricechecker.R
 import com.example.pricechecker.RegisterActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
-
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
@@ -49,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
         val currentuser = auth.currentUser
         if (currentuser != null) {
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            startActivity(intent)
+//            startActivity(intent)
 //            finish()
         }
         login.setOnClickListener {
@@ -70,14 +67,15 @@ class LoginActivity : AppCompatActivity() {
 //                            finish()
                         } else {
                             Toast.makeText(this@LoginActivity, "Login failed, please try again! ", Toast.LENGTH_LONG).show()
+//                            finish()
                         }
                     }
-
+            loading.visibility = View.VISIBLE
+            loginViewModel.login(username.text.toString(), password.text.toString())
         }
 
-
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+                .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -106,21 +104,21 @@ class LoginActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
-            finish()
+//            finish()
         })
 
         username.afterTextChanged {
             loginViewModel.loginDataChanged(
-                username.text.toString(),
-                password.text.toString()
+                    username.text.toString(),
+                    password.text.toString()
             )
         }
 
         password.apply {
             afterTextChanged {
                 loginViewModel.loginDataChanged(
-                    username.text.toString(),
-                    password.text.toString()
+                        username.text.toString(),
+                        password.text.toString()
                 )
             }
 
@@ -128,35 +126,30 @@ class LoginActivity : AppCompatActivity() {
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
                         loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
+                                username.text.toString(),
+                                password.text.toString()
                         )
                 }
                 false
             }
 
-            login.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
-            }
+//            login.setOnClickListener {
+//
+//            }
         }
     }
-
-
-//    login.setOnClickListener {
-//        startActivity(Intent(this, MainActivity::class.java))
-//        startActivity(intent)
-//    }
-
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
         // TODO : initiate successful logged in experience
+//        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//        startActivity(intent)
+//        finish()
         Toast.makeText(
-            applicationContext,
-            "$welcome $displayName",
-            Toast.LENGTH_LONG
+                applicationContext,
+                "$welcome $displayName",
+                Toast.LENGTH_LONG
         ).show()
     }
 

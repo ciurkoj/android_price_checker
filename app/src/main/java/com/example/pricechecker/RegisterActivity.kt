@@ -2,21 +2,17 @@ package com.example.pricechecker
 
 import android.content.Intent
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import com.google.firebase.auth.FirebaseAuth
 import com.example.pricechecker.ui.login.LoginActivity
-import kotlinx.android.synthetic.main.activity_login.*
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.android.synthetic.main.activity_register.password
-import kotlinx.android.synthetic.main.activity_register.username
+
+
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -37,22 +33,16 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(findViewById(R.id.toolbar))
+
         val actionBar = supportActionBar
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar!!.setDisplayHomeAsUpEnabled(true)
             actionBar!!.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24)
         }
 
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
+
     }
+
 
     private fun signUpUser() {
 
@@ -79,7 +69,7 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        startActivity(Intent(this,LoginActivity::class.java))
+                        startActivity(Intent(this, LoginActivity::class.java))
                         finish()
                     } else {
                         Toast.makeText(baseContext, "Sign Up failed. Try again after some time.",
