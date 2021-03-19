@@ -40,8 +40,9 @@ class LoginActivity : AppCompatActivity() {
         val signup = findViewById<Button>(R.id.signup)
 
         signup.setOnClickListener {
-            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+//            startActivity(intent)
+//            finish()
         }
         val currentuser = auth.currentUser
         if (currentuser != null) {

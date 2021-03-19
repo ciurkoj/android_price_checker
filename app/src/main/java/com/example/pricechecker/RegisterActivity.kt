@@ -26,13 +26,12 @@ class RegisterActivity : AppCompatActivity() {
 
 //        register.setOnClickListener{
 //            signUpUser()
-//        }
+////        }
         register.setOnClickListener {
-            signUpUser()
-
+           signUpUser()
         }
-
-        setSupportActionBar(findViewById(R.id.toolbar))
+//
+//        setSupportActionBar(findViewById(R.id.toolbar))
 
         val actionBar = supportActionBar
         if (actionBar != null) {
