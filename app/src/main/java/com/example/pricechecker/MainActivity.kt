@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -15,7 +16,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.example.pricechecker.ui.login.LoginActivity
+import com.example.pricechecker.fragments.ManualFragment
+import com.example.pricechecker.fragments.RecentFragment
+import com.example.pricechecker.fragments.ScanFragment
+import com.example.pricechecker.fragments.adapters.ViewPagerAdapter
+import kotlinx.android.synthetic.main.app_bar_main.*
+
+
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,11 +36,7 @@ class MainActivity : AppCompatActivity() {
 //        setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_main)
 
-        val fab: FloatingActionButton = findViewById(R.id.fab)
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
@@ -43,8 +47,28 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        setUpTabs()
+
+        val signup = findViewById<Button>(R.id.button1)
+
+        signup.setOnClickListener {
+            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+//            startActivity(intent)
+//            finish()
+        }
+
+    }
+
+    private fun setUpTabs() {
+        val adapter = ViewPagerAdapter (supportFragmentManager)
+
+        adapter.addFragment(ManualFragment() ,"Manual")
+        adapter.addFragment(RecentFragment(), "Recent")
+        adapter.addFragment(ScanFragment(), "Scan")
 
 
+        viewPager.adapter = adapter
+        tabs.setupWithViewPager(viewPager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -55,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                     "welcome displayName",
                     Toast.LENGTH_LONG
             ).show()
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, SettingsActivity::class.java))
             true
         }
 

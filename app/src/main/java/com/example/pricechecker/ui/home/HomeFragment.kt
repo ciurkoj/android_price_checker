@@ -9,6 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.pricechecker.R
+import com.example.pricechecker.fragments.ManualFragment
+import com.example.pricechecker.fragments.RecentFragment
+import com.example.pricechecker.fragments.ScanFragment
+import com.example.pricechecker.fragments.adapters.ViewPagerAdapter
+import kotlinx.android.synthetic.main.app_bar_main.*
+
+
 
 class HomeFragment : Fragment() {
 
@@ -28,4 +35,5 @@ class HomeFragment : Fragment() {
         })
         return root
     }
+
 }

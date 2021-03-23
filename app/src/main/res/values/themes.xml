@@ -15,7 +15,9 @@
 <!--        <item name="windowActionBar">false</item>-->
 <!--        <item name="windowNoTitle">true</item>-->
     </style>
-
+    <style name="CustomTabStyle"   >
+        <item name="android:textSize">8pt</item>
+    </style>
     <style name="Theme.PriceChecker.NoActionBar"   >
 
 
