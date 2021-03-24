@@ -4,40 +4,46 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
-import androidx.lifecycle.ViewModelProvider
 import com.example.pricechecker.fragments.ManualFragment
 import com.example.pricechecker.fragments.RecentFragment
 import com.example.pricechecker.fragments.ScanFragment
 import com.example.pricechecker.fragments.adapters.ViewPagerAdapter
-import com.example.pricechecker.ui.home.HomeViewModel
+import com.example.pricechecker.ui.login.LoginActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-
 
 
 class MainActivity : AppCompatActivity() {
 
 
+    //    private val currentUser: Any
     private lateinit var appBarConfiguration: AppBarConfiguration
+    val db = Firebase.firestore
+    val TAG = "<============>"
+    val currentUser = Firebase.auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_main)
 
+//        val currentUser = Firebase.auth.currentUser
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -62,8 +68,16 @@ class MainActivity : AppCompatActivity() {
 //
 //        }
 
+        updateNavHeader()
+        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
+        val headerView = navigationView.getHeaderView(0)
+        val logout_btn: FloatingActionButton = headerView.findViewById(R.id.logout)
+        logout_btn.setOnClickListener {
+            signOut()
+        }
 
     }
+
 
     private fun setUpTabs() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
@@ -108,7 +122,32 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    private fun signOut() {
+        // [START auth_sign_out]
+        Firebase.auth.signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+        // [END auth_sign_out]
+    }
+    private fun updateNavHeader() {
+        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
+        val headerView = navigationView.getHeaderView(0)
+        val navUsername: TextView = headerView.findViewById(R.id.show_username)
+        val navUserMail: TextView = headerView.findViewById(R.id.email)
+//        val navUserPhot: ImageView = headerView.findViewById(R.id.nav_user_photo)
 
+        navUserMail.setText(currentUser.getEmail())
+        navUsername.setText(currentUser.getDisplayName())
+        Log.i(TAG, "(((((((((===> ${currentUser.displayName}")
+        // now we will use Glide to load user image
+        // first we need to import the library
+
+
+        // now we will use Glide to load user image
+        // first we need to import the library
+//        Glide.with(this).load(currentUser.getPhotoUrl()).into(navUserPhot)
+
+    }
 
 
 }

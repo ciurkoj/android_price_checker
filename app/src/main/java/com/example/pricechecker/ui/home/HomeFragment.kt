@@ -23,41 +23,53 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
-    val db = Firebase.firestore
-    val TAG = "<============>"
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        val user = Firebase.auth.currentUser.email
-        homeViewModel =
-                ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
-        val username: TextView = root.findViewById(R.id.text_username)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
-//        homeViewModel.text.observe(viewLifecycleOwner, Observer { username.text = "meh"})
-        db.collection("user_data")
-                .get()
-                .addOnSuccessListener { result ->
-
-                    for (document in result) {
-                        Log.d(TAG, "${document.id} => ${document.data}")
-                        homeViewModel.text1.observe(viewLifecycleOwner, Observer {
-                            username.text = user.toString()//document.data.toString()
-                        })
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.w(TAG, "Error getting documents.", exception)
-                }
-
-        return root
-    }
+//    private lateinit var homeViewModel: HomeViewModel
+//    val db = Firebase.firestore
+//    val TAG = "<============>"
+//    override fun onCreateView(
+//            inflater: LayoutInflater,
+//            container: ViewGroup?,
+//            savedInstanceState: Bundle?
+//    ): View? {
+//        val user = Firebase.auth.currentUser.email
+//        homeViewModel =
+//                ViewModelProvider(this).get(HomeViewModel::class.java)
+//        val root = inflater.inflate(R.layout.fragment_home, container, false)
+//        val textView: TextView = root.findViewById(R.id.text_home)
+//
+//        val drawer = inflater.inflate(R.layout.nav_header_main, container, false)
+//        val udrawer: TextView = drawer.findViewById(R.id.show_username)
+//        homeViewModel.text2.observe(viewLifecycleOwner, Observer {
+//            udrawer.text = it
+//        })
+////        udrawer.text = "fddfd"
+//        Log.d(TAG, "udrawer======> ${udrawer.text}")
+//        val username: TextView = root.findViewById(R.id.text_username)
+//        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+//            textView.text = it
+//        })
+//        Log.d(TAG, "username==> ${username.text}")
+//
+////        homeViewModel.text.observe(viewLifecycleOwner, Observer { username.text = "meh"})
+//        db.collection("user_data")
+//                .get()
+//                .addOnSuccessListener { result ->
+//
+//                    for (document in result) {
+//                        Log.d(TAG, "${document.id} => ${document.data}")
+//                        homeViewModel.text1.observe(viewLifecycleOwner, Observer {
+//                            username.text = user.toString()//document.data.toString()
+//                        })
+//                        Log.d(TAG, "===> ${username.text}")
+//                        Log.d(TAG, "===> ${udrawer.text}")
+//                    }
+//                }
+//                .addOnFailureListener { exception ->
+//                    Log.w(TAG, "Error getting documents.", exception)
+//                }
+//
+//        return root
+//    }
 }
 
 

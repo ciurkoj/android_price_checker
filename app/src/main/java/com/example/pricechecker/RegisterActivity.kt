@@ -10,7 +10,12 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.pricechecker.ui.login.LoginActivity
+import com.google.android.material.theme.MaterialComponentsViewInflater
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_register.*
@@ -22,6 +27,9 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     val db = Firebase.firestore
     private val TAG = "=======DocSnippets======="
+
+//    val user = Firebase.auth.currentUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -80,26 +88,59 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        val user = hashMapOf(
-                            "user_name" to username.text.toString(),
-                            "user_email" to email,
-                            "born" to 1815
-                        )
+                        val user = auth.currentUser
 
-// Add a new document with a generated ID
-                        db.collection("user_data").document(email)
-                            .set(user)
-                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-                            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
-                            }.addOnFailureListener { e ->
-                                Log.w(TAG, "Error adding document", e)
+
+
+                        val profileUpdates = UserProfileChangeRequest.Builder().apply {
+                            displayName = username.text.toString()
+                        }.build()
+                        user?.updateProfile(profileUpdates)?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d(TAG,"User profile updated.")
                             }
-                        startActivity(Intent(this, LoginActivity::class.java))
+                        }
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "createUserWithEmail:success")
+
+                        updateUI(user)
+//                    if (task.isSuccessful) {
+////                        val user = hashMapOf(
+////                            "user_name" to username.text.toString(),
+////                            "user_email" to email,
+////                            "born" to 1815
+////                        )
+//                        val user = auth.currentUser
+//
+//                        val profileUpdates = UserProfileChangeRequest.Builder().apply {
+//                            displayName = "name"
+//                        }.build()
+//                        user?.updateProfile(profileUpdates)?.addOnCompleteListener { task ->
+//                            if (task.isSuccessful) {
+//                                Log.d(TAG, "User profile updated.")
+//                            }
+//                        }
+//// Add a new document with a generated ID
+//                        db.collection("user_data").document(email)
+//                            .set(user)
+//                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+//                            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
+//                            }.addOnFailureListener { e ->
+//                                Log.w(TAG, "Error adding document", e)
+//                            }
+                        startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     } else {
                         Toast.makeText(baseContext, "Sign Up failed. Try again after some time.",
                                 Toast.LENGTH_SHORT).show()
                     }
+
                 }
+
+
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+
     }
 }

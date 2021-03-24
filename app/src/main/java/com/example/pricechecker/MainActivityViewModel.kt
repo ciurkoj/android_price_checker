@@ -1,13 +1,11 @@
-package com.example.pricechecker.ui.home
+package com.example.pricechecker
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 
-class HomeViewModel : ViewModel() {
+class MainActViewModel : ViewModel() {
+
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is Home Fragment"

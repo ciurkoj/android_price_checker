@@ -20,5 +20,7 @@
             android:id="@+id/settings_activity"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/action_settings" />
+
     </group>
+
 </menu>
