@@ -2,12 +2,10 @@ package com.example.pricechecker
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Button
+import android.util.Log
+import android.view.*
+import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,14 +14,18 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
+import androidx.lifecycle.ViewModelProvider
 import com.example.pricechecker.fragments.ManualFragment
 import com.example.pricechecker.fragments.RecentFragment
 import com.example.pricechecker.fragments.ScanFragment
 import com.example.pricechecker.fragments.adapters.ViewPagerAdapter
+import com.example.pricechecker.ui.home.HomeViewModel
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-
-import kotlinx.android.synthetic.main.fragment_home.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -43,28 +45,32 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
+                R.id.nav_home,
+//                R.id.nav_gallery,
+//                R.id.nav_slideshow,
+                R.id.settings_activity), drawerLayout)
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
         setUpTabs()
 
-        val signup = findViewById<Button>(R.id.button1)
+//        val signup = findViewById<Button>(R.id.button1)
+//
+//        signup.setOnClickListener {
+//            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
+//
+//        }
 
-        signup.setOnClickListener {
-            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-//            startActivity(intent)
-//            finish()
-        }
 
     }
 
     private fun setUpTabs() {
-        val adapter = ViewPagerAdapter (supportFragmentManager)
+        val adapter = ViewPagerAdapter(supportFragmentManager)
 
-        adapter.addFragment(ManualFragment() ,"Manual")
         adapter.addFragment(RecentFragment(), "Recent")
         adapter.addFragment(ScanFragment(), "Scan")
+        adapter.addFragment(ManualFragment(), "Manual")
 
 
         viewPager.adapter = adapter
@@ -90,6 +96,7 @@ class MainActivity : AppCompatActivity() {
             super.onOptionsItemSelected(item)
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
@@ -100,4 +107,8 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
+
+
 }

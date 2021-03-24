@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
                         if(it.isSuccessful) {
                             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                             startActivity(intent)
-//                            finish()
+                            finish()
                         } else {
                             Toast.makeText(this@LoginActivity, "Login failed, please try again! ", Toast.LENGTH_LONG).show()
 //                            finish()
