@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/fm_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_margin="4dp"-->
+<!--        android:layout_weight=".6"-->
+<!--        android:background="@color/colorAccent"-->
+<!--        android:visibility="visible" />-->
+        <fragment
+            android:id="@+id/barcode_fragment"
+            android:name="com.example.pricechecker.barcode_reader.BarcodeReaderFragment"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            app:auto_focus="true"
+            app:use_flash="false" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        android:layout_weight=".4"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan" />
+
+
+        <TextView
+            android:id="@+id/tv_result_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/barcode_fragment"-->
+<!--        android:name="com.example.pricechecker.barcode_reader.BarcodeReaderFragment"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="500dp"-->
+<!--        app:auto_focus="true"-->
+<!--        app:use_flash="false" />-->
+
+<!--&lt;!&ndash;    <com.example.pricechecker.barcode_reader.ScannerOverlay&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_height="500dp"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:background="#44000000"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:line_color="#7323DC"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:line_speed="6"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:line_width="5"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:square_height="250"&ndash;&gt;-->
+<!--&lt;!&ndash;        app:square_width="250" />&ndash;&gt;-->
+
+<!--</RelativeLayout>-->
+

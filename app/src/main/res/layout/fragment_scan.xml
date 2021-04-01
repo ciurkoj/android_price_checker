@@ -1,20 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.RecentFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <RelativeLayout
+    <fragment
+        android:id="@+id/scan_fragment"
+        android:name="com.example.pricechecker.barcode_reader.BarcodeReaderFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="500dp"
+        app:auto_focus="true"
+        app:use_flash="false" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        android:layout_weight=".4"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan" />
+
+
         <TextView
+            android:id="@+id/result_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_margin="4dp"
+            android:background="@drawable/border"
+            android:selectAllOnFocus="false"
             android:text="Scan"
-            android:textColor="@color/colorPrimary"
-            android:textSize="24sp"/>
-    </RelativeLayout>
+            android:textSize="20sp"
+            android:textStyle="bold" />/>
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".fragments.ScanFragment">-->
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:text="Scan"-->
+<!--            android:textColor="@color/colorPrimary"-->
+<!--            android:textSize="24sp"/>-->
+<!--    </RelativeLayout>-->
+
+<!--</FrameLayout>-->
+
