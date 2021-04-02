@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabTextAppearance="@style/CustomTabStyle"
-            app:tabBackground="@color/colorPrimary"
+            app:tabBackground="@color/none"
             app:tabGravity="fill"
             app:tabInlineLabel="true"
             app:tabMode="fixed"

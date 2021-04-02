@@ -10,4 +10,5 @@
     <color name="colorPrimary">#2196F3</color>
     <color name="scanner_line">#00ceff</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="none">#4D000000</color>
 </resources>

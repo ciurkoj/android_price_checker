@@ -3,10 +3,21 @@ package com.example.pricechecker
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.pricechecker.model.Post
+import com.example.pricechecker.repository.Repository
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
-class MainActViewModel : ViewModel() {
+class MainActivityViewModel(private val repository: Repository) : ViewModel() {
 
-
+    val myResponse: MutableLiveData<Response<Post>> = MutableLiveData()
+    fun getPost(){
+        viewModelScope.launch{
+            val response = repository.getPost()
+            myResponse.value = response
+        }
+    }
     private val _text = MutableLiveData<String>().apply {
         value = "This is Home Fragment"
     }

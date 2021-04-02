@@ -1,6 +1,7 @@
 package com.example.pricechecker
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
@@ -11,14 +12,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.pricechecker.barcode_reader.BarcodeReaderActivity
 import com.example.pricechecker.barcode_reader.BarcodeReaderFragment
 import com.example.pricechecker.fragments.BarcodeFragment
 import com.example.pricechecker.fragments.ManualFragment

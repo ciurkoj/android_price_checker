@@ -60,7 +60,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         button = (Button) view.findViewById(R.id.btn_fragment);
         button.setOnClickListener( new View.OnClickListener() {
             public void onClick(View v) {
-                if(buttonClicked == false){
+                if(buttonClicked == true){
                     barcodeReader.onResume();
                     buttonClicked^= true;
                 }else{
