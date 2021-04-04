@@ -1,6 +1,5 @@
 package com.example.pricechecker.fragments
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,17 +11,13 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.example.pricechecker.MainActivityViewModel
 import com.example.pricechecker.MainActivityViewModelFactory
 import com.example.pricechecker.R
 import com.example.pricechecker.repository.Repository
-import com.google.gson.JsonObject
 import kotlinx.android.synthetic.main.fragment_manual.*
-
 
 class ManualFragment : Fragment(), OnQueryTextListener {
     // TODO: Rename and change types of parameters
@@ -34,20 +29,38 @@ class ManualFragment : Fragment(), OnQueryTextListener {
     override fun onCreate(savedInstanceState:Bundle?){
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
+        val options: HashMap<String, String> = HashMap()
+        options["google_domain"] = "google.co.uk"
+        options["device"] = "mobile"
+        Log.e("OPTIONSSSSSSSSSSSSS ", options.toString())
         val repository = Repository()
         val viewModelFactory = MainActivityViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
-        viewModel.getPost()
+
+        viewModel.getCustomQuery("milk", options)
         viewModel.myResponse.observe(this, Observer { response ->
-            if(response.isSuccessful){
-                Log.d("Response: ", response.body()?.search_metadata.toString())
+            if (response.isSuccessful) {
+                Log.e("Response=====>: ", response.toString())
+                Log.e("Response=====>: ", response.body()?.search_metadata.toString())
+                Log.d("Response: ", response.body()?.search_parameters.toString())
+                Log.e("Response=====>: ", response.body()?.search_metadata.toString())
+                Log.d("Response: ", response.body()?.recipes_results.toString())
+                Log.e("Response=====>: ", response.body()?.local_map.toString())
+                Log.d("Response: ", response.body()?.knowledge_graph.toString())
+                Log.e("Response=====>: ", response.body()?.related_questions.toString())
+                Log.d("Response: ", response.body()?.organic_results.toString())
+                Log.e("Response=====>: ", response.body()?.related_search_boxes.toString())
+                Log.d("Response: ", response.body()?.related_searches.toString())
+                Log.e("Response=====>: ", response.body()?.pagination.toString())
+                Log.d("Response: ", response.body()?.serpapi_pagination.toString())
+
                 textView.text = response.code().toString()
                 mainResponse = response.body()?.search_metadata.toString()
-            }else{
-                Log.d("Response: ",response.errorBody().toString())
+            } else {
+                Log.e("Response=====>: ", response.toString())
+                Log.d("Response: ", response.errorBody().toString())
                 textView.text = response.code().toString()
             }
-            
         })
 
     }
@@ -79,7 +92,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?): Boolean {
 //        TODO("Not yet implemented")
 
-//        textView.textSize =
+        textView.text = "duupaaa!!!"
         return true
     }
 
