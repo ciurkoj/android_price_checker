@@ -22,6 +22,7 @@ import java.util.List;
 
 import static com.example.pricechecker.R.id.barcode_fragment;
 import static com.example.pricechecker.R.id.result_head;
+import static java.sql.DriverManager.println;
 
 public class ScanFragment extends Fragment implements BarcodeReaderFragment.BarcodeReaderListener {
     private static final String TAG = ScanFragment.class.getSimpleName();
@@ -74,12 +75,12 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
 //        result_head.setText("barcode.displayValue");
         return view;
     }
-
     @Override
     public void onScanned(final Barcode barcode) {
         Log.e(TAG, "onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
         result_head.setText(barcode.displayValue);
+        println(barcode.displayValue);
 //        result_head.setTextColor(Color.WHITE);
         Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
     }

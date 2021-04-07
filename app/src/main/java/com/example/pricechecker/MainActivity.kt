@@ -1,8 +1,8 @@
 package com.example.pricechecker
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.util.SparseArray
 import android.view.Menu
@@ -17,6 +17,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.pricechecker.barcode_reader.BarcodeReaderFragment
 import com.example.pricechecker.fragments.BarcodeFragment
 import com.example.pricechecker.fragments.ManualFragment
@@ -31,6 +32,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.fragment_manual.*
 
 
 class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener {
@@ -38,8 +40,8 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     private val BARCODE_READER_ACTIVITY_REQUEST = 1208
     private val mTvResult: TextView? = null
     private val mTvResultHeader: TextView? = null
-//    private var btn_fragment: Button = findViewById<Button>(R.id.btn_fragment)
 
+    //    private var btn_fragment: Button = findViewById<Button>(R.id.btn_fragment)
     //    private val currentUser: Any
     private lateinit var appBarConfiguration: AppBarConfiguration
     val db = Firebase.firestore
@@ -48,6 +50,10 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
 //        setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_main)
 
@@ -88,7 +94,9 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
             signOut()
         }
 
+
     }
+
 
     private fun setUpTabs() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
@@ -146,18 +154,11 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
         val headerView = navigationView.getHeaderView(0)
         val navUsername: TextView = headerView.findViewById(R.id.show_username)
         val navUserMail: TextView = headerView.findViewById(R.id.email)
-//        val navUserPhot: ImageView = headerView.findViewById(R.id.nav_user_photo)
 
         navUserMail.setText(currentUser.getEmail())
         navUsername.setText(currentUser.getDisplayName())
         Log.i(TAG, "(((((((((===> ${currentUser.displayName}")
-        // now we will use Glide to load user image
-        // first we need to import the library
 
-
-        // now we will use Glide to load user image
-        // first we need to import the library
-//        Glide.with(this).load(currentUser.getPhotoUrl()).into(navUserPhot)
 
     }
 
