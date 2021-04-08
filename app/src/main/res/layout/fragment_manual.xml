@@ -18,6 +18,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/border"
+            android:paddingBottom="-26dp"
             android:tooltipText="@string/action_settings" />
 
         <TextView
@@ -25,10 +26,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-
             android:layout_marginStart="0dp"
+            android:layout_marginTop="50dp"
             android:layout_marginEnd="0dp"
             android:layout_marginBottom="643dp"
             android:text="TextViewDupa" />
@@ -37,20 +38,20 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
-            android:layout_height="484dp"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="4dp">
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="50dp">
 
             <ListView
                 android:id="@+id/searchResultsView"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="0dp"
 
-                />
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </RelativeLayout>

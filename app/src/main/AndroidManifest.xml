@@ -43,7 +43,8 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.PriceChecker.NoActionBar">
+            android:theme="@style/Theme.PriceChecker.NoActionBar"
+            android:windowSoftInputMode="adjustNothing">
 
 <!--             <intent-filter>-->
 <!--             <action android:name="android.intent.action.MAIN" />-->
