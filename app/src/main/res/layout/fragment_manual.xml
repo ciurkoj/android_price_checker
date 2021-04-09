@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ManualFragment">
+    tools:context=".fragments.ManualFragment"
+    android:id="@+id/manual_fragment"
+    >
 
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:id="@+id/frame_layout">
 
 
         <SearchView
@@ -19,7 +24,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/border"
             android:paddingBottom="-26dp"
-            android:tooltipText="@string/action_settings" />
+            />
 
         <TextView
             android:id="@+id/textView"
@@ -41,18 +46,35 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="4dp"
-            android:layout_marginTop="50dp">
+            android:layout_marginTop="50dp"
+            android:clickable="true"
+            android:focusableInTouchMode="true">
 
-            <ListView
+            <view class="androidx.appcompat.app.AlertController$RecycleListView"
                 android:id="@+id/searchResultsView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="0dp" />
+
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <View
+            android:id="@+id/View1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginTop="50dp"
+             />
 
     </RelativeLayout>
 

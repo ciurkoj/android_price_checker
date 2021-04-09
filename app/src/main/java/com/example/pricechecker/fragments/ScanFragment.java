@@ -1,5 +1,7 @@
 package com.example.pricechecker.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.pricechecker.MainActivity;
 import com.example.pricechecker.R;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.example.pricechecker.barcode_reader.BarcodeReaderFragment;
@@ -32,13 +35,14 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
     private static TextView result;
     private Button button;
     private Boolean buttonClicked = false;
-
+    private Button next ;
     public static ScanFragment newInstance() {
         Bundle args = new Bundle();
         ScanFragment fragment = new ScanFragment();
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         result_head = (TextView) view.findViewById(R.id.result_head);
         result = (TextView) view.findViewById(R.id.result);
         button = (Button) view.findViewById(R.id.btn_fragment);
+        next = (Button) view.findViewById(R.id.next_fragment);;
         button.setOnClickListener( new View.OnClickListener() {
             public void onClick(View v) {
                 if(buttonClicked == true){
@@ -72,6 +77,19 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
 //                result.setText(buttonClicked.toString());
             }
         } );
+         next.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                //Yes
+                ((MainActivity)getActivity()).swipeRight(2);
+            }
+        });
+//        next.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mOnButtonClickListener.onButtonClicked(v);
+//            }
+//        });
 //        result_head.setText("barcode.displayValue");
         return view;
     }

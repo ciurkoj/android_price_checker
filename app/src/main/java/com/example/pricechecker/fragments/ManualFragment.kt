@@ -7,9 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import android.widget.SearchView.OnQueryTextListener
-import androidx.core.content.contentValuesOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +17,6 @@ import com.example.pricechecker.MainActivityViewModel
 import com.example.pricechecker.MainActivityViewModelFactory
 import com.example.pricechecker.R
 import com.example.pricechecker.model.ExampleItem
-import com.example.pricechecker.model.ShoppingResults
 import com.example.pricechecker.repository.Repository
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -39,28 +37,20 @@ class ManualFragment : Fragment(), OnQueryTextListener {
     private var param1: String? = null
     private var param2: String? = null
 
-
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
-
 
     private lateinit var viewModel: MainActivityViewModel
     public var mainResponse: JsonObject? = null
     var image: String? = null
-    val names = arrayListOf<String>(
-        "Donald Trump", "Steve Jobs", "Tim Cook", "Mark Zuckerberg", "Barack Obama",
-        "Donald Trump", "Steve Jobs", "Tim Cook", "Mark Zuckerberg", "Barack Obama",
-        "Donald Trump", "Steve Jobs", "Tim Cook", "Mark Zuckerberg", "Barack Obama",
-        "Donald Trump", "Steve Jobs", "Tim Cook", "Mark Zuckerberg", "Barack Obama",
-        "Donald Trump", "Steve Jobs", "Tim Cook", "Mark Zuckerberg", "Barack Obama"
-    )
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
 
-    }
 
+    }
 
 
     fun readTheResponse(response: Response<JsonObject>, keys: Boolean, values: Boolean) {
@@ -69,7 +59,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
         val map1: MutableMap<String, Any> = gson.fromJson(response.body(), type)
         map1.forEach { (k: String, v: Any) ->
             if (v is Map<*, *>) {
-                println("coś jest" + k)
+//                println("coś jest" + k)
                 if (keys && values) {
 //                    println("$k => $v")
                     if (v is Map<*, *>) {
@@ -84,7 +74,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                     }
                 }
             } else {
-                println("nie ma nic")
+//                println("nie ma nic")
                 if (keys && values) {
                     if (k == "shopping_results") {
 //                        println("$k => $v")
@@ -108,9 +98,9 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                         }
                     }
                 } else if (keys && !values) {
-                    println(k)
+//                    println(k)
                 } else if (!keys && values) {
-                    print(v)
+//                    print(v)
                 }
             }
         }
@@ -123,96 +113,86 @@ class ManualFragment : Fragment(), OnQueryTextListener {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_manual, container, false)
-        val searchBar = view.findViewById<SearchView>(R.id.searchView)
         val textView = view.findViewById<TextView>(R.id.textView)
+        val searchBar = view.findViewById<SearchView>(R.id.searchView)
+        searchBar.isIconifiedByDefault = false
 
-//        var imageView: ImageView = view.findViewById(R.id.imageView)
+        searchBar.queryHint = "Search for a product name..."
+
+        println("stataataaart")
+//        searchBar.setQuery("coffee", false)
         var image2 = view.findViewById<ImageView>(R.id.imageView2)
         var listView = view.findViewById<ListView>(R.id.searchResultsView)
-//        listView.adapter = MyCustomAdapter(this, names)
-        listView.setPadding(0,0,0,0)
-//        var mAdapter = MyCustomAdapter(this, mainResponse!!)
-//        listView.setAdapter(mAdapter)
+        listView.setPadding(0, 0, 0, 0)
         searchBar.setOnClickListener {
             searchBar.isIconifiedByDefault = true
             searchBar.isFocusable = true
             searchBar.isIconified = false
             searchBar.requestFocusFromTouch()
 
-            if (mainResponse != null) {
-                image = MyCustomAdapter(this, mainResponse!!).readShoppingResults(mainResponse)
-            } else {
-                image = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
-            }
-            println(image)
-//            Glide.with(this)
-//                .load(image)
-//                .circleCrop()
-//                .into(image2)
             textView.text = "dupa"
-            listView.adapter
         }
         searchBar.setOnQueryTextListener(this)
 
-
+        listView.clearFocus()
         swipeRefreshLayout = view.findViewById(R.id.swipeToRefresh)
         swipeRefreshLayout.setOnRefreshListener {
             swipeRefreshLayout.isRefreshing = false
-//            var mAdapter = MyCustomAdapter(this, mainResponse!!, image!!)
-//            listView.setAdapter(mAdapter)
-//            mAdapter.notifyDataSetChanged()
-            println("dupsko"+image)
+            searchBar.clearFocus()
+
+
+        }
+        listView.setOnItemClickListener { adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+            searchBar.clearFocus()
+            println("clear")
         }
 
+        var View1 = view.findViewById<View>(R.id.View1)
+
+        View1.setOnClickListener {
+            searchBar.clearFocus()
+            println("clear")
+        }
 
 
         return view
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-//        TODO("Not yet implemented")
 
+    override fun onQueryTextSubmit(query: String): Boolean {
+//        TODO("Not yet implemented")
+        var listView = view?.findViewById<ListView>(R.id.searchResultsView)
+        val searchBar = view?.findViewById<SearchView>(R.id.searchView)
+        searchBar!!.setQuery(query, false)
+        val View1 = view?.findViewById<View>(R.id.View1)
+        View1?.isVisible = false
+        listView?.clearFocus()
+        swipeRefreshLayout.isRefreshing = true
         textView.text = query
         println(query)
         val options: HashMap<String, String> = HashMap()
         options["google_domain"] = "google.co.uk"
         options["device"] = "desktop"
         options["tbm"] = "shop"
+        options["no_cache"] = "true"
         options["tbs"] = "local_avail:1"
         options["location"] = "Coventry, England, United Kingdom"
         Log.e("OPTIONSSSSSSSSSSSSS ", options.toString())
         val repository = Repository()
         val viewModelFactory = MainActivityViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
-
         viewModel.getCustomQuery(query!!.toString(), options)
+        var mAdapter: MyCustomAdapter
         viewModel.myResponse.observe(this, Observer { response ->
             if (response.isSuccessful) {
-//                readTheResponse(response, true, true)
-                println(response.toString())
-//                textView.text = response.code().toString()
                 mainResponse = response.body()
-                println(response.toString())
-                var listView = view?.findViewById<ListView>(R.id.searchResultsView)
-                println(mainResponse.toString())
-                var mAdapter = MyCustomAdapter(this, mainResponse!!, image!!)
-                listView?.setAdapter(mAdapter)
+                var mAdapter = MyCustomAdapter(this, mainResponse!!, swipeRefreshLayout)
+                listView?.adapter = mAdapter
                 mAdapter.notifyDataSetChanged()
-                image = MyCustomAdapter(this, mainResponse!!).readShoppingResults(mainResponse)
-//                readShoppingResults(response)
-//                Thread.sleep(2000L)
             } else {
                 Log.d("Response Error: ", response.errorBody().toString())
-//                textView.text = response.code().toString()
             }
         })
-        if (searchView != null) {
-//            searchView?.setQuery("", false);
-            searchView?.clearFocus();
-            searchView?.onActionViewCollapsed();
-        }
-//        Thread.sleep(2000L)
-//        image = MyCustomAdapter(names).readShoppingResults(mainResponse)
         return true
     }
 
@@ -226,24 +206,58 @@ class ManualFragment : Fragment(), OnQueryTextListener {
 
     private class MyCustomAdapter(
         var context: ManualFragment,
-        private val jsonData: JsonObject,
+        private val jsonData: JsonObject? = null,
+        var swipeRefreshLayout: SwipeRefreshLayout,
         private var image: String = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
     ) : BaseAdapter() {
-        //        var image = "https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
-        fun readShoppingResults(response: JsonObject?): String {
+        private var mData: JsonObject = jsonData!!
+        fun MyListAdapter(context: Any, mData: JsonObject) {
+            this.mData = mData
+            this.context = context as ManualFragment
+        }
 
+        fun getData(): JsonObject {
+            return mData
+        }
+
+        // responsible for how many rows in my list
+        override fun getCount(): Int {
+            var size: Int = 0
+            val gson = GsonBuilder().create()
+            val type: Type = object : TypeToken<Map<String, Any>>() {}.getType()
+            val map1: MutableMap<String, Any> = gson.fromJson(jsonData, type)
+            map1.forEach { (k: String, v: Any) ->
+                if (k == "shopping_results") {
+                    v as List<Any>
+                    size = v.size
+
+                }
+            }
+
+            return size
+        }
+
+        // you can also ignore this
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        // you can ignore this for now
+        override fun getItem(position: Int): Any {
+            return "TEST STRING"
+        }
+
+        fun readShoppingResults(response: JsonObject?): String {
             val gson = GsonBuilder().create()
             val type: Type = object : TypeToken<Map<String, Any>>() {}.getType()
             val map1: MutableMap<String, Any> = gson.fromJson(response, type)
             map1.forEach { (k: String, v: Any) ->
                 if (v is Map<*, *>) {
-                    println("coś jest" + k)
+//                    println("coś jest" + k)
                     if (v is Map<*, *>) {
                         (v as Map<Any, Any>).forEach(BiConsumer<Any, Any> { k1: Any, v1: Any -> })
                     }
                 } else {
-                    println("nie ma nic" + k)
-
                     if (k == "shopping_results") {
                         if (k != "top_stories_link" && k != "top_stories_serpapi_link") {
                             val x: List<Any> = v as List<Any>
@@ -256,7 +270,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                             v1.forEach { (key, value) ->
                                 if (key == "thumbnail") {
                                     val image = value.toString()
-                                    println(value.toString())
+//                                    println(value.toString())
                                     return image
                                 }
                             }
@@ -265,33 +279,6 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                 }
             }
             return image
-        }
-
-
-        private var mData: JsonObject = jsonData
-
-        fun MyListAdapter(context: Any, mData:JsonObject) {
-            this.mData = mData
-            this.context = context as ManualFragment
-        }
-
-        fun getData(): JsonObject {
-            return mData
-        }
-
-        // responsible for how many rows in my list
-        override fun getCount(): Int {
-            return 20
-        }
-
-        // you can also ignore this
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        // you can ignore this for now
-        override fun getItem(position: Int): Any {
-            return "TEST STRING"
         }
 
         // responsible for rendering out each row
@@ -315,46 +302,49 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                 search_res = convertView
             }
             val viewHolder = search_res.tag as ViewHolder
-//            viewHolder.nameTextView.setTextColor(Color.WHITE)
-            var result: Map<ShoppingResults,*>
-
             val gson = GsonBuilder().create()
             val type: Type = object : TypeToken<Map<String, Any>>() {}.getType()
-            val map1: MutableMap<String, Any> = gson.fromJson(jsonData , type)
+            val map1: MutableMap<String, Any> = gson.fromJson(jsonData, type)
             map1.forEach { (k: String, v: Any) ->
                 if (v is Map<*, *>) {
                     if (v is Map<*, *>) {
-                        (v as Map<Any, Any>).forEach(BiConsumer<Any, Any> { k1: Any, v1: Any -> })
+//                        println(v)
+                        (v as Map<Any, Any>).forEach(BiConsumer<Any, Any> { k1: Any, v1: Any ->
+//                            println("$k1 : $v1")
+                        })
                     }
                 } else {
                     if (k == "shopping_results") {
+
                         val x = v as List<Any>
-                            var result : Map <Any, Any> = x[position] as Map<Any, Any>
-                            result.getValue("title").toString()
-                                .also { viewHolder.nameTextView.text = it }
+                        var result: Map<Any, Any> = x[position] as Map<Any, Any>
+                        result.getValue("title").toString()
+                            .also { viewHolder.nameTextView.text = it }
                         result.getValue("price").toString()
-                            .also { viewHolder.positionTextView.text  = it }
+                            .also { viewHolder.positionTextView.text = it }
                         result.getValue("source").toString()
-                                .also { viewHolder.positionTextView2.text  = it }
+                            .also { viewHolder.positionTextView2.text = it }
 //                                println("====>"+position)
-                            result.getValue("thumbnail").also{
-                                Picasso
-                                    .get()
-                                    .load(it.toString())
-                                    .resize(200, 200)
-                                    .into(viewHolder.imageView2);
-                            }
-                            }
+                        result.getValue("thumbnail").also {
+                            Picasso
+                                .get()
+                                .load(it.toString())
+                                .resize(250, 250)
+//                                .fit()
+//                                .onlyScaleDown()
+                                .centerInside()
+                                .into(viewHolder.imageView2);
                         }
-
                     }
+                }
+            }
 
-
-
-//            viewHolder.nameTextView.text = names[position]
-
+            if (notifyDataSetChanged() != null) {
+                swipeRefreshLayout.isRefreshing = false
+            }
             return search_res
         }
+
 
         private class ViewHolder(
             val nameTextView: TextView,
@@ -364,11 +354,14 @@ class ManualFragment : Fragment(), OnQueryTextListener {
         )
     }
 
-    private class ExampleAdapter(private val exampleList: List<ExampleItem>) : RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder>(){
+    private class ExampleAdapter(private val exampleList: List<ExampleItem>) :
+        RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExampleViewHolder {
-            val itemView = LayoutInflater.from(parent.context).inflate(R.layout.search_result,
-            parent, false)
+            val itemView = LayoutInflater.from(parent.context).inflate(
+                R.layout.search_result,
+                parent, false
+            )
 
             return ExampleViewHolder(itemView)
         }
@@ -381,11 +374,15 @@ class ManualFragment : Fragment(), OnQueryTextListener {
 
         override fun getItemCount() = exampleList.size
 
-        class ExampleViewHolder(itemView:View): RecyclerView.ViewHolder(itemView){
-            val imageView : ImageView = itemView.imageView2
+        class ExampleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val imageView: ImageView = itemView.imageView2
             val textView: TextView = itemView.textView
 
         }
+    }
+
+    interface AdapterCallback {
+        fun itemsBound()
     }
 
 }

@@ -17,7 +17,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.pricechecker.barcode_reader.BarcodeReaderFragment
 import com.example.pricechecker.fragments.BarcodeFragment
 import com.example.pricechecker.fragments.ManualFragment
@@ -35,12 +34,12 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_manual.*
 
 
-class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener {
+class MainActivity : AppCompatActivity() , BarcodeReaderFragment.BarcodeReaderListener {
 
     private val BARCODE_READER_ACTIVITY_REQUEST = 1208
     private val mTvResult: TextView? = null
     private val mTvResultHeader: TextView? = null
-
+    val adapter = ViewPagerAdapter(supportFragmentManager)
     //    private var btn_fragment: Button = findViewById<Button>(R.id.btn_fragment)
     //    private val currentUser: Any
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 
 
     private fun setUpTabs() {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
+
 
         adapter.addFragment(RecentFragment(), "Recent")
         adapter.addFragment(ScanFragment(), "Scan")
@@ -108,6 +107,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -140,7 +140,19 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+    fun swipeRight(x: Int) {
+        if (x < 4) {
+            viewPager.adapter = adapter
+            println(viewPager.currentItem)
+            viewPager.currentItem = 2
+        }
+    }
 
+    fun swipeLeft(x: Int) {
+        if (x > 0) {
+            viewPager.currentItem = x - 1
+        }
+    }
     private fun signOut() {
         // [START auth_sign_out]
         Firebase.auth.signOut()
