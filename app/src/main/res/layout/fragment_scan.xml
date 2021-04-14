@@ -9,7 +9,7 @@
         android:id="@+id/scan_fragment"
         android:name="com.example.pricechecker.barcode_reader.BarcodeReaderFragment"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="300dp"
         app:auto_focus="true"
         app:use_flash="false" />
 
@@ -30,24 +30,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="next" />
-
-
         <TextView
             android:id="@+id/result_head"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_margin="4dp"
             android:background="@drawable/border"
             android:selectAllOnFocus="false"
             android:text="Scan"
-            android:textSize="20sp"
-            android:textStyle="bold" />/>
+            android:textStyle="bold" />
+        <!--            android:textSize="20sp"-->
 
-        <TextView
-            android:id="@+id/result"
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/listview_flavor"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="4dp" />
+            android:layout_marginTop="15dp"/>
+
+
+
+
+
 
     </LinearLayout>
 

@@ -182,9 +182,9 @@ class ManualFragment : Fragment(), OnQueryTextListener {
         val viewModelFactory = MainActivityViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
         viewModel.getCustomQuery(query!!.toString(), options)
-        var mAdapter: MyCustomAdapter
         viewModel.myResponse.observe(this, Observer { response ->
             if (response.isSuccessful) {
+                println(response)
                 mainResponse = response.body()
                 var mAdapter = MyCustomAdapter(this, mainResponse!!, swipeRefreshLayout)
                 listView?.adapter = mAdapter
@@ -252,6 +252,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
             val type: Type = object : TypeToken<Map<String, Any>>() {}.getType()
             val map1: MutableMap<String, Any> = gson.fromJson(response, type)
             map1.forEach { (k: String, v: Any) ->
+
                 if (v is Map<*, *>) {
 //                    println("coś jest" + k)
                     if (v is Map<*, *>) {
@@ -305,7 +306,16 @@ class ManualFragment : Fragment(), OnQueryTextListener {
             val gson = GsonBuilder().create()
             val type: Type = object : TypeToken<Map<String, Any>>() {}.getType()
             val map1: MutableMap<String, Any> = gson.fromJson(jsonData, type)
+            println(map1)
             map1.forEach { (k: String, v: Any) ->
+
+                when (v) {
+                    is String -> println("String: 'v'. Capitalize :{v.capitalize()}")
+                    is List<*> -> println("Float: 'v'")
+                    is ArrayList<*> -> println("Double: 'v'")
+                    is Object -> println("Integer: 'v'")
+                    else -> println("Unknown Type")
+                }
                 if (v is Map<*, *>) {
                     if (v is Map<*, *>) {
 //                        println(v)

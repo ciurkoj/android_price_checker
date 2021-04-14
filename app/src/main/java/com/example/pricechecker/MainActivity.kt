@@ -12,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -34,19 +36,24 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_manual.*
 
 
-class MainActivity : AppCompatActivity() , BarcodeReaderFragment.BarcodeReaderListener {
+class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener {
+
 
     private val BARCODE_READER_ACTIVITY_REQUEST = 1208
     private val mTvResult: TextView? = null
     private val mTvResultHeader: TextView? = null
     val adapter = ViewPagerAdapter(supportFragmentManager)
+
     //    private var btn_fragment: Button = findViewById<Button>(R.id.btn_fragment)
     //    private val currentUser: Any
     private lateinit var appBarConfiguration: AppBarConfiguration
     val db = Firebase.firestore
     val TAG = "<============>"
     val currentUser = Firebase.auth.currentUser
-
+    var fragmentB: ScanFragment? = null
+    private lateinit var scanFragment: ScanFragment
+    private lateinit var fTranslation: FragmentTransaction
+    private lateinit var fManager: FragmentManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,7 +84,15 @@ class MainActivity : AppCompatActivity() , BarcodeReaderFragment.BarcodeReaderLi
         navView.setupWithNavController(navController)
 
         setUpTabs()
-
+//    private lateinit var scanFragment: ScanFragment
+//
+//    private lateinit var fTranslation: FragmentTransaction
+//    private lateinit var fManager: FragmentManager
+        fManager = supportFragmentManager
+        fTranslation = fManager.beginTransaction()
+        scanFragment = ScanFragment()
+        fTranslation.replace(R.id.viewPager, scanFragment)
+        fTranslation.commit()
 //        val signup = findViewById<Button>(R.id.button1)
 //
 //        signup.setOnClickListener {
@@ -107,7 +122,8 @@ class MainActivity : AppCompatActivity() , BarcodeReaderFragment.BarcodeReaderLi
 
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
-
+        supportFragmentManager.beginTransaction()
+            .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -140,6 +156,7 @@ class MainActivity : AppCompatActivity() , BarcodeReaderFragment.BarcodeReaderLi
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
     fun swipeRight(x: Int) {
         if (x < 4) {
             viewPager.adapter = adapter
@@ -153,6 +170,7 @@ class MainActivity : AppCompatActivity() , BarcodeReaderFragment.BarcodeReaderLi
             viewPager.currentItem = x - 1
         }
     }
+
     private fun signOut() {
         // [START auth_sign_out]
         Firebase.auth.signOut()
