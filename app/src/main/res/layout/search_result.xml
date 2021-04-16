@@ -9,37 +9,37 @@
 
 
     <TextView
-        android:id="@+id/name_textView"
+        android:id="@+id/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="132dp"
         android:layout_marginTop="20dp"
-        android:text="Name"
+        android:text="Title"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/position_textview"
+        android:id="@+id/item_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Price"
-        app:layout_constraintStart_toStartOf="@+id/name_textView"
-        app:layout_constraintTop_toBottomOf="@+id/name_textView" />
+        app:layout_constraintStart_toStartOf="@+id/item_title"
+        app:layout_constraintTop_toBottomOf="@+id/item_title" />
 
     <TextView
-        android:id="@+id/position_textview2"
+        android:id="@+id/item_source"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Shop"
-        app:layout_constraintStart_toStartOf="@+id/position_textview"
-        app:layout_constraintTop_toBottomOf="@+id/position_textview" />
+        app:layout_constraintStart_toStartOf="@+id/item_price"
+        app:layout_constraintTop_toBottomOf="@+id/item_price" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/item_thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

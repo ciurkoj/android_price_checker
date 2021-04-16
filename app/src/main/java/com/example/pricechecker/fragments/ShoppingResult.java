@@ -35,20 +35,21 @@ public class ShoppingResult {
 
     }
 
-    public String getTitle() {
+    public String getResultTitle() {
         return title;
     }
 
-    public String getSource() {
+    public String getResultSource() {
         return source;
     }
 
-    public String getPrice() {
+    public String getResultPrice() {
         return price;
     }
 
-    public String getThumbnail() {
+    public String getResultThumbnail() {
         return thumbnail;
     }
+
 
 }

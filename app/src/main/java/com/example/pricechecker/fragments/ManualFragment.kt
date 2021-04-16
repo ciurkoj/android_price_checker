@@ -121,7 +121,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
 
         println("stataataaart")
 //        searchBar.setQuery("coffee", false)
-        var image2 = view.findViewById<ImageView>(R.id.imageView2)
+        var image2 = view.findViewById<ImageView>(R.id.item_thumbnail)
         var listView = view.findViewById<ListView>(R.id.searchResultsView)
         listView.setPadding(0, 0, 0, 0)
         searchBar.setOnClickListener {
@@ -292,10 +292,10 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                 val layoutInflater = LayoutInflater.from(viewGroup!!.context)
                 search_res = layoutInflater.inflate(R.layout.search_result, viewGroup, false)
                 val viewHolder = ViewHolder(
-                    search_res.name_textView,
-                    search_res.position_textview,
-                    search_res.position_textview2,
-                    search_res.imageView2
+                    search_res.item_title,
+                    search_res.item_price,
+                    search_res.item_source,
+                    search_res.item_thumbnail
                 )
                 search_res.tag = viewHolder
             } else {
@@ -329,11 +329,11 @@ class ManualFragment : Fragment(), OnQueryTextListener {
                         val x = v as List<Any>
                         var result: Map<Any, Any> = x[position] as Map<Any, Any>
                         result.getValue("title").toString()
-                            .also { viewHolder.nameTextView.text = it }
+                            .also { viewHolder.itemTitle.text = it }
                         result.getValue("price").toString()
-                            .also { viewHolder.positionTextView.text = it }
+                            .also { viewHolder.itemPrice.text = it }
                         result.getValue("source").toString()
-                            .also { viewHolder.positionTextView2.text = it }
+                            .also { viewHolder.itemSource.text = it }
 //                                println("====>"+position)
                         result.getValue("thumbnail").also {
                             Picasso
@@ -343,7 +343,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
 //                                .fit()
 //                                .onlyScaleDown()
                                 .centerInside()
-                                .into(viewHolder.imageView2);
+                                .into(viewHolder.itemThumbnail);
                         }
                     }
                 }
@@ -357,10 +357,10 @@ class ManualFragment : Fragment(), OnQueryTextListener {
 
 
         private class ViewHolder(
-            val nameTextView: TextView,
-            val positionTextView: TextView,
-            val positionTextView2: TextView,
-            val imageView2: ImageView
+            val itemTitle: TextView,
+            val itemPrice: TextView,
+            val itemSource: TextView,
+            val itemThumbnail: ImageView
         )
     }
 
@@ -378,14 +378,14 @@ class ManualFragment : Fragment(), OnQueryTextListener {
 
         override fun onBindViewHolder(holder: ExampleViewHolder, position: Int) {
             val currentItem = exampleList[position]
-            holder.imageView.setImageResource(currentItem.imageResource)
+            holder.itemThumbnail.setImageResource(currentItem.imageResource)
             holder.textView.text = currentItem.text1
         }
 
         override fun getItemCount() = exampleList.size
 
         class ExampleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val imageView: ImageView = itemView.imageView2
+            val itemThumbnail: ImageView = itemView.item_thumbnail
             val textView: TextView = itemView.textView
 
         }

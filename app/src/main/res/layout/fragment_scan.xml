@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <fragment
@@ -25,11 +25,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Scan" />
+
         <Button
             android:id="@+id/next_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="next" />
+
         <TextView
             android:id="@+id/result_head"
             android:layout_width="wrap_content"
@@ -40,14 +42,16 @@
             android:text="Scan"
             android:textStyle="bold" />
         <!--            android:textSize="20sp"-->
-
-        <ListView
-            android:id="@+id/listview_flavor"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"/>
-
-
+            android:id="@+id/scan_fragment_SwipeRefreshLayout">
+            <ListView
+                android:id="@+id/listview_flavor"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="0dp" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 
@@ -58,25 +62,24 @@
 </LinearLayout>
 
 
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    tools:context=".fragments.ScanFragment">-->
 
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    tools:context=".fragments.ScanFragment">-->
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_centerInParent="true"-->
+    <!--            android:text="Scan"-->
+    <!--            android:textColor="@color/colorPrimary"-->
+    <!--            android:textSize="24sp"/>-->
+    <!--    </RelativeLayout>-->
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:text="Scan"-->
-<!--            android:textColor="@color/colorPrimary"-->
-<!--            android:textSize="24sp"/>-->
-<!--    </RelativeLayout>-->
-
-<!--</FrameLayout>-->
+    <!--</FrameLayout>-->
 
