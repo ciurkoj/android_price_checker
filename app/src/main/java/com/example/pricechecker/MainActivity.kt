@@ -111,15 +111,11 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 
     }
 
-
     private fun setUpTabs() {
-
-
         adapter.addFragment(RecentFragment(), "Recent")
         adapter.addFragment(ScanFragment(), "Scan")
         adapter.addFragment(ManualFragment(), "Manual")
         adapter.addFragment(BarcodeFragment(), "Barcode")
-
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
         supportFragmentManager.beginTransaction()
@@ -137,7 +133,6 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
             startActivity(Intent(this, SettingsActivity::class.java))
             true
         }
-
 
         else -> {
             // If we got here, the user's action was not recognized.

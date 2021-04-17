@@ -147,12 +147,12 @@ class ManualFragment : Fragment(), OnQueryTextListener {
             println("clear")
         }
 
-        var View1 = view.findViewById<View>(R.id.View1)
+        var View1 = view.findViewById<View>(R.id.manual_list_view)
 
-        View1.setOnClickListener {
-            searchBar.clearFocus()
-            println("clear")
-        }
+//        View1.setOnItemClickListener {
+//            searchBar.clearFocus()
+//            println("clear")
+//        }
 
 
         return view
@@ -164,7 +164,7 @@ class ManualFragment : Fragment(), OnQueryTextListener {
         var listView = view?.findViewById<ListView>(R.id.searchResultsView)
         val searchBar = view?.findViewById<SearchView>(R.id.searchView)
         searchBar!!.setQuery(query, false)
-        val View1 = view?.findViewById<View>(R.id.View1)
+        val View1 = view?.findViewById<View>(R.id.manual_list_view)
         View1?.isVisible = false
         listView?.clearFocus()
         swipeRefreshLayout.isRefreshing = true
@@ -306,16 +306,8 @@ class ManualFragment : Fragment(), OnQueryTextListener {
             val gson = GsonBuilder().create()
             val type: Type = object : TypeToken<Map<String, Any>>() {}.getType()
             val map1: MutableMap<String, Any> = gson.fromJson(jsonData, type)
-            println(map1)
             map1.forEach { (k: String, v: Any) ->
 
-                when (v) {
-                    is String -> println("String: 'v'. Capitalize :{v.capitalize()}")
-                    is List<*> -> println("Float: 'v'")
-                    is ArrayList<*> -> println("Double: 'v'")
-                    is Object -> println("Integer: 'v'")
-                    else -> println("Unknown Type")
-                }
                 if (v is Map<*, *>) {
                     if (v is Map<*, *>) {
 //                        println(v)

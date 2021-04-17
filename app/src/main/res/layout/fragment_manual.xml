@@ -64,8 +64,8 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <View
-            android:id="@+id/View1"
+        <ListView
+            android:id="@+id/manual_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"

@@ -1,5 +1,6 @@
 package com.example.pricechecker.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.JsonReader;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.pricechecker.MainActivity;
 import com.example.pricechecker.MainActivityViewModel;
 import com.example.pricechecker.MainActivityViewModelFactory;
+import com.example.pricechecker.ProductActivity;
 import com.example.pricechecker.R;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -48,7 +50,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static java.sql.DriverManager.println;
 import static java.sql.DriverManager.setLogWriter;
 
-public class ScanFragment extends Fragment implements BarcodeReaderFragment.BarcodeReaderListener {
+public class ScanFragment extends Fragment implements BarcodeReaderFragment.BarcodeReaderListener{
     private static final String TAG = ScanFragment.class.getSimpleName();
 
     private BarcodeReaderFragment barcodeReader;
@@ -122,6 +124,9 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
                 onScanned(globalBarcode);
             }
         });
+
+
+
         return view;
     }
 
@@ -132,7 +137,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         itemsArrayList.clear();
         Log.e(TAG, "onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
-        result_head.setText(barcode.displayValue);
+        result_head.setText("Searching for: "+barcode.displayValue);
         scanFragmentSwipeRefreshLayout.setRefreshing(true);
 
         println(barcode.displayValue);
@@ -143,15 +148,11 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         options.put("google_domain", "google.co.uk");
 
 
-        Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Barcode: " + barcode.displayValue, Toast.LENGTH_SHORT).show();
 
 //        ListView listView = (ListView) getView().findViewById(R.id.listview_flavor);
 
         // Get a reference to the ListView, and attach this adapter to it.
-
-
-
-
 
         //create adapter object
 
@@ -177,32 +178,31 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    result_head.setText("Code: " + response.code());
-                    Log.e("TAG1", response.toString());
 
-                }
-                Gson gson = new Gson();
-                Type type = new TypeToken<BodyResponse>() {}.getType();
-                BodyResponse posts = gson.fromJson(response.body().toString(), type);
+                    Gson gson = new Gson();
+                    Type type = new TypeToken<BodyResponse>() {}.getType();
+                    BodyResponse posts = gson.fromJson(response.body().toString(), type);
 
-//                Log.e("sssssssssssssssssSSSSSSSSS", String.valueOf(posts.getShopping_results().size()));
-                try{
-                    for(ShoppingResult result : posts.getShopping_results()){
-                        Log.e("sss", result.getResultTitle());
-                        Log.e("sss", result.getResultSource());
-                        Log.e("sss", result.getResultPrice());
-                        Log.e("sss", result.getResultThumbnail());
-                        itemsArrayList.add(new Item(result.getResultTitle(), result.getResultPrice(), result.getResultSource(), result.getResultThumbnail()));
+                    try{
+                        for(ShoppingResult result : posts.getShopping_results()){
+                            Log.e("sss", result.getResultTitle());
+                            Log.e("sss", result.getResultSource());
+                            Log.e("sss", result.getResultPrice());
+                            Log.e("sss", result.getResultThumbnail());
+                            itemsArrayList.add(new Item(result.getResultTitle(), result.getResultPrice(), result.getResultSource(), result.getResultThumbnail()));
 
+                            result_head.setText("Success! Found: "+posts.getShopping_results().get(0).getResultTitle());
+                        }
+                    }catch(Exception e){
+                        Toast.makeText(getActivity(), "Sorry, couldn't recognize the code. Please try again or use manual search", Toast.LENGTH_SHORT).show();
                     }
-                }catch(Exception e){
-                    Toast.makeText(getActivity(), "Sorry, couldn't recognize the code. Please try again or use manual search", Toast.LENGTH_SHORT).show();
                 }
 
 //                ShoppingResult shops = posts.getShopping_results().get(0);
 //                result_head.setText("Code: " + response.code());
 //                itemsArrayList.add(new Item(shops.getTitle(), shops.getSource(), shops.getThumbnail()));
                 scanFragmentSwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getActivity(), "Click on an item to get more information about it." , Toast.LENGTH_LONG).show();
             }
 
 
@@ -212,15 +212,9 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
             }
         });
 
-//        adapter = new CustomListAdapter(this, itemsArrayList);
-        //set custom adapter as adapter to our list view
-//        itemsListView.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
-//        itemsListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         Log.e("Ddddsdad","scan after");
-//        listView.setAdapter(adapter);
         barcodeReader.onPause();
         buttonClicked ^= true;
     }
@@ -244,5 +238,13 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
     public void onCameraPermissionDenied() {
         Toast.makeText(getActivity(), "Camera permission denied!", Toast.LENGTH_LONG).show();
     }
+
+//    @Override
+//    public void onItemClick(int position) {
+//        itemsArrayList.get(position);
+//        Intent intent = new Intent(getActivity(), ProductActivity.class);
+//        startActivity(intent);
+//
+//    }
 }
 

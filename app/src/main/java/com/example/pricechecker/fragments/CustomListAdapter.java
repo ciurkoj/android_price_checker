@@ -40,6 +40,8 @@ public class CustomListAdapter extends BaseAdapter {
         return items.get(position); //returns the item at the specified position
     }
 
+
+
     @Override
     public long getItemId(int position) {
         return position;
