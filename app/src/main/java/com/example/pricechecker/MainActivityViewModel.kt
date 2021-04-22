@@ -16,6 +16,8 @@ import retrofit2.Response
 
 class MainActivityViewModel(private val repository: Repository) : ViewModel() {
 
+
+
     @kotlin.jvm.JvmField
     var myResponse1: MutableLiveData<Response<JsonObject>> = MutableLiveData()
 
@@ -35,17 +37,8 @@ class MainActivityViewModel(private val repository: Repository) : ViewModel() {
             Log.e("Launch2 ERROR:" ,"MARK 2")
         }
     }
-    fun getCustomQuery1(query: String, options: Map<String, String>){
-        Log.e("VIEW ERROR:" ,"MARK 2")
 
-        viewModelScope.launch{
-            Log.e("Launch ERROR:" ,"MARK 2")
 
-            val response = repository.getCustomQuery(query, options)
-            Log.e("Launch1 ERROR:" ,"MARK 2")
-            myResponse1.value = response
 
-            Log.e("Launch2 ERROR:" ,"MARK 2")
-        }
-    }
+
 }

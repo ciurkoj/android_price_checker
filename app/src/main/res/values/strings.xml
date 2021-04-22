@@ -59,6 +59,10 @@
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="grant">GRANT</string>
     <string name="cancel">CANCEL</string>
+    <string name="option_get_place">Option_get_place</string>
+    <string name="default_info_title">Default Info Title</string>
+    <string name="default_info_snippet">Default Info Snippet</string>
+    <string name="pick_place">Pick place</string>
     <string-array name="items_name">
         <item>MacBook Pro</item>
         <item>Alienware</item>

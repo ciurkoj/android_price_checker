@@ -1,6 +1,11 @@
 package com.example.pricechecker.fragments;
 
-public class Item {
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
+public class Item extends ArrayList<String> {
     private String itemTitle;
     private String itemPrice;
     private String itemSource;
@@ -22,4 +27,15 @@ public class Item {
         return this.thumbnailUrl;
     }
 
+    @NonNull
+    @Override
+    public Stream<String> stream() {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Stream<String> parallelStream() {
+        return null;
+    }
 }

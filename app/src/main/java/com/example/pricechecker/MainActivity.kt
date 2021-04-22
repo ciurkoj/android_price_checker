@@ -19,11 +19,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager.widget.ViewPager
 import com.example.pricechecker.barcode_reader.BarcodeReaderFragment
-import com.example.pricechecker.fragments.BarcodeFragment
-import com.example.pricechecker.fragments.ManualFragment
-import com.example.pricechecker.fragments.RecentFragment
-import com.example.pricechecker.fragments.ScanFragment
+import com.example.pricechecker.fragments.*
 import com.example.pricechecker.fragments.adapters.ViewPagerAdapter
 import com.example.pricechecker.ui.login.LoginActivity
 import com.google.android.gms.vision.barcode.Barcode
@@ -33,15 +31,13 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.fragment_manual.*
+import androidx.fragment.app.setFragmentResult
 
 
-class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener {
+class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener  {
 
 
-    private val BARCODE_READER_ACTIVITY_REQUEST = 1208
-    private val mTvResult: TextView? = null
-    private val mTvResultHeader: TextView? = null
+
     val adapter = ViewPagerAdapter(supportFragmentManager)
 
     //    private var btn_fragment: Button = findViewById<Button>(R.id.btn_fragment)
@@ -50,18 +46,21 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     val db = Firebase.firestore
     val TAG = "<============>"
     val currentUser = Firebase.auth.currentUser
-    var fragmentB: ScanFragment? = null
+    private lateinit var fragmentA: ScanFragment
+    private lateinit var fragmentB: ManualFragment
+
     private lateinit var scanFragment: ScanFragment
     private lateinit var fTranslation: FragmentTransaction
     private lateinit var fManager: FragmentManager
+    lateinit var viewPager: ViewPager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 //        setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_main)
+        viewPager = findViewById(R.id.viewPager)
 
 //        val currentUser = Firebase.auth.currentUser
         findViewById<TextView>(R.id.tv_result)
@@ -84,21 +83,12 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
         navView.setupWithNavController(navController)
 
         setUpTabs()
-//    private lateinit var scanFragment: ScanFragment
-//
-//    private lateinit var fTranslation: FragmentTransaction
-//    private lateinit var fManager: FragmentManager
+
         fManager = supportFragmentManager
         fTranslation = fManager.beginTransaction()
         scanFragment = ScanFragment()
         fTranslation.replace(R.id.viewPager, scanFragment)
         fTranslation.commit()
-//        val signup = findViewById<Button>(R.id.button1)
-//
-//        signup.setOnClickListener {
-//            startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-//
-//        }
 
         updateNavHeader()
         val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
@@ -108,17 +98,30 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
             signOut()
         }
 
-
     }
 
     private fun setUpTabs() {
         adapter.addFragment(RecentFragment(), "Recent")
-        adapter.addFragment(ScanFragment(), "Scan")
-        adapter.addFragment(ManualFragment(), "Manual")
-        adapter.addFragment(BarcodeFragment(), "Barcode")
+        adapter.addFragment(ScanFragment(), "Barcode Scan")
+        adapter.addFragment(ManualFragment(), "Manual Search")
         viewPager.adapter = adapter
         tabs.setupWithViewPager(viewPager)
+
+        fragmentA = ScanFragment()
+        fragmentB = ManualFragment()
         supportFragmentManager.beginTransaction()
+            .replace(R.id.viewPager, fragmentA)
+            .replace(R.id.viewPager, fragmentB!!)
+            .commit()
+
+    }
+
+    fun refreshManual(){
+        fragmentA = ScanFragment()
+        fragmentB = ManualFragment()
+        supportFragmentManager.beginTransaction()
+            .detach(fragmentB)
+            .attach(fragmentB)
             .commit()
     }
 
@@ -206,6 +209,10 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     override fun onCameraPermissionDenied() {
         TODO("Not yet implemented")
     }
+
+
+
+
 
 
 }

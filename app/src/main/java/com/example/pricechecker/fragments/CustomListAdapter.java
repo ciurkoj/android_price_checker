@@ -2,33 +2,32 @@ package com.example.pricechecker.fragments;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.pricechecker.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CustomListAdapter extends BaseAdapter {
-    private ScanFragment context;
+public class CustomListAdapter extends ArrayAdapter<Item> {
+    private Context context;
     private ArrayList<Item> items;
 
 
     //public constructor
-    public CustomListAdapter(ScanFragment context, ArrayList<Item> items) {
+    public CustomListAdapter(Context context, ArrayList<Item> items) {
+        super(context, R.layout.search_result, items);
         this.context = context;
         this.items = items;
 
     }
+
+
 
     @Override
     public int getCount() {
@@ -36,7 +35,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Item getItem(int position) {
         return items.get(position); //returns the item at the specified position
     }
 
@@ -67,8 +66,6 @@ public class CustomListAdapter extends BaseAdapter {
                 .get()
                 .load(items.get(position).getThumbnailUrl())
                 .resize(250, 250)
-//                                .fit()
-//                                .onlyScaleDown()
                 .centerInside()
                 .into(viewHolder.itemImage);
 

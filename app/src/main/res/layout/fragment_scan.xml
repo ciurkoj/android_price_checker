@@ -37,9 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:background="@drawable/border"
             android:selectAllOnFocus="false"
-            android:text="Scan"
+            android:text="Scan a barcode to find information about the product..."
             android:textStyle="bold" />
         <!--            android:textSize="20sp"-->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
