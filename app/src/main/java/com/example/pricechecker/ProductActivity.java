@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 
 import android.os.LocaleList;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 
 import com.example.pricechecker.fragments.BodyResponse;
@@ -30,6 +32,8 @@ import com.example.pricechecker.fragments.Item;
 import com.example.pricechecker.fragments.JsonPlaceHolderApi;
 import com.example.pricechecker.fragments.LocalResult;
 
+import com.example.pricechecker.fragments.RecentFragment;
+import com.example.pricechecker.repository.Repository;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,6 +45,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import com.google.android.libraries.places.api.Places;
@@ -49,6 +55,16 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.FirebaseAuthCredentialsProvider;
+import com.google.firebase.installations.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -56,9 +72,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +138,11 @@ public class ProductActivity extends AppCompatActivity
     private String itemPrice;
     private String itemSource;
     private String thumbnailUrl;
-
+    private MainActivityViewModel viewModel;
+    @NotNull
+    public static Item item;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     // [START maps_current_place_on_create]
     @Override
@@ -159,13 +183,64 @@ public class ProductActivity extends AppCompatActivity
             itemPrice = extras.getString("itemPrice");
             itemSource = extras.getString("itemSource");
             thumbnailUrl = extras.getString("thumbnailUrl");
+//            new Item(itemTitle,itemPrice,itemSource,thumbnailUrl)
+
+            Map<String, Object> item = new HashMap<>();
+            item.put("itemTitle", itemTitle);
+            item.put("itemPrice", itemPrice);
+            item.put("itemSource", itemSource);
+            item.put("thumbnailUrl", thumbnailUrl);
+            long time= System.currentTimeMillis();
+            Boolean exits = false;
+
+            db.collection("user_data").document(user.getEmail())
+                    .collection("recent_searches").get();
+            CollectionReference collection = db.collection("user_data").document(user.getEmail())
+                    .collection("recent_searches");
+
+            collection
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    Log.e(TAG, document.getId() + " => " + document.getData());
+                                    if(document.getData().containsValue(itemTitle)){
+                                        Log.e(TAG, "DUPA"+document.getId() + " => " + document.getData());
+                                        collection.document(document.getId()).delete();
+                                    }else {
+                                        collection.document(String.valueOf(time)).set(item);
+                                    }
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+//            db.collection("user_data").document(user.getEmail())
+//                    .collection("recent_searches")
+//                    .document(String.valueOf(time))
+//                    .set(item)
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d(TAG, "DocumentSnapshot successfully written!");
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.w(TAG, "Error writing document", e);
+//                        }
+//                    });
 
             //The key argument here must match that used in the other activity\
         }
-        Toast.makeText(this, "Please wait while map is being loaded..." , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Please wait while map is being loaded...", Toast.LENGTH_LONG).show();
 
         List<String> query = Arrays.asList(itemTitle.split(" "));
-        List<String> subList = query.subList(0, query.size()-2);
+        List<String> subList = query.subList(0, query.size() - 2);
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", itemSource);//String.join(" ", subList));
         parameter.put("google_domain", "google.co.uk");
@@ -175,7 +250,6 @@ public class ProductActivity extends AppCompatActivity
         parameter.put("tbm", "lcl");
         parameter.put("num", "50");
         parameter.put("device", "desktop");
-
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://serpapi.com/")
@@ -189,24 +263,25 @@ public class ProductActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
                     Log.e("sss", response.toString());
                     Gson gson = new Gson();
-                    Type type = new TypeToken<BodyResponse>() {}.getType();
-                    BodyResponse search_response= gson.fromJson(response.body().toString(), type);
-                    try{
-                        for(LocalResult result : search_response.getLocal_results()){
+                    Type type = new TypeToken<BodyResponse>() {
+                    }.getType();
+                    BodyResponse search_response = gson.fromJson(response.body().toString(), type);
+                    try {
+                        for (LocalResult result : search_response.getLocal_results()) {
                             Double latitude = parseDouble(String.valueOf(result.getGpsCoordinates().get("latitude")));
                             Double longitude = parseDouble(String.valueOf(result.getGpsCoordinates().get("longitude")));
                             map.addMarker(new MarkerOptions()
                                     .position(new LatLng(latitude, longitude))
                                     .title(result.getResultTitle()))
                                     .setSnippet(result.getResultAddress());
-
                         }
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(getApplicationContext(), "Sorry, couldn't recognize the code. Please try again or use manual search", Toast.LENGTH_SHORT).show();
                     }
                 }
-                Toast.makeText(getApplicationContext(), "Click on an item to get more information about it." , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Click on an item to get more information about it.", Toast.LENGTH_LONG).show();
             }
+
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.e("TAG Error", t.getMessage());

@@ -39,7 +39,10 @@ public class CustomListAdapter extends ArrayAdapter<Item> {
         return items.get(position); //returns the item at the specified position
     }
 
-
+    public void clearData() {
+        // clear the data
+        items.clear();
+    }
 
     @Override
     public long getItemId(int position) {

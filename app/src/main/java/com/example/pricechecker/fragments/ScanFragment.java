@@ -66,9 +66,10 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
     private Button next;
     private SwipeRefreshLayout scanFragmentSwipeRefreshLayout;
     private Barcode globalBarcode;
-    ListView itemsListView ;
+    ListView itemsListView;
     CustomListAdapter adapter;
-    ArrayList<Item> itemsArrayList = new ArrayList<Item>() {};
+    ArrayList<Item> itemsArrayList = new ArrayList<Item>() {
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,12 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         });
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProductActivity.class);
+                intent.putExtra("itemTitle", "A product");
+                intent.putExtra("itemPrice", "worthless");
+                intent.putExtra("itemSource", "from nowhere");
+                intent.putExtra("thumbnailUrl", "https://imgix.bustle.com/uploads/image/2021/1/14/f1499ba8-d5f9-41b0-8a21-61ba6cec190d-happy-baby-yoda.jpeg?w=1200&h=630&fit=crop&crop=faces&fm=jpg");
+                startActivity(intent);
             }
         });
         scanFragmentSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.scan_fragment_SwipeRefreshLayout);
@@ -119,7 +126,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
                 onScanned(globalBarcode);
             }
         });
-        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        itemsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Repository.Companion.getInstance().getLiveProgress().setValue(itemsArrayList.get(position).getItemTitle());
@@ -135,7 +142,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         itemsArrayList.clear();
         Log.e(TAG, "onScanned: " + barcode.displayValue);
         barcodeReader.playBeep();
-        result_head.setText("Searching for: "+barcode.displayValue);
+        result_head.setText("Searching for: " + barcode.displayValue);
         scanFragmentSwipeRefreshLayout.setRefreshing(true);
         println(barcode.displayValue);
         Repository repository = new Repository();
@@ -151,7 +158,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         parameters.put("gl", "uk");
         parameters.put("hl", "en");
         parameters.put("no_cache", "true");
-                Retrofit retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://serpapi.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -161,21 +168,22 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    Log.e("Ddddsdad",response.toString());
+                    Log.e("Ddddsdad", response.toString());
                     Gson gson = new Gson();
-                    Type type = new TypeToken<BodyResponse>() {}.getType();
-                    BodyResponse search_response= gson.fromJson(response.body(), type);
-                    try{
-                        for(ShoppingResult result : search_response.getShopping_results()){
+                    Type type = new TypeToken<BodyResponse>() {
+                    }.getType();
+                    BodyResponse search_response = gson.fromJson(response.body(), type);
+                    try {
+                        for (ShoppingResult result : search_response.getShopping_results()) {
                             itemsArrayList.add(new Item(result.getResultTitle(), result.getResultPrice(), result.getResultSource(), result.getResultThumbnail()));
-                            result_head.setText("Success! Found: "+search_response.getShopping_results().get(0).getResultTitle());
+                            result_head.setText("Success! Found: " + search_response.getShopping_results().get(0).getResultTitle());
                         }
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         Toast.makeText(getActivity(), "Sorry, couldn't recognize the code. Please try again or use manual search", Toast.LENGTH_SHORT).show();
                     }
                 }
                 scanFragmentSwipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), "Click on an item to get more information about it." , Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Click on an item to get more information about it.", Toast.LENGTH_LONG).show();
             }
 
             @Override

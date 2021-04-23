@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pricechecker.fragments.Item
 import com.example.pricechecker.model.SerpApiQuery
 import com.example.pricechecker.model.ShoppingResults
 import com.example.pricechecker.repository.Repository
@@ -16,14 +17,13 @@ import retrofit2.Response
 
 class MainActivityViewModel(private val repository: Repository) : ViewModel() {
 
+    private val mutableSelectedItem = MutableLiveData<Item>()
+    val selectedItem: LiveData<Item> get() = mutableSelectedItem
 
-
-    @kotlin.jvm.JvmField
-    var myResponse1: MutableLiveData<Response<JsonObject>> = MutableLiveData()
-
-    //    lateinit var myResponse1: LiveData<Any>
+    fun selectItem(item: Item) {
+        mutableSelectedItem.value = item
+    }
     val myResponse: MutableLiveData<Response<JsonObject>> = MutableLiveData()
-//    var  myResponse1: MutableLiveData<Response<JsonObject>> = MutableLiveData()
     fun getCustomQuery(query: String, options: Map<String, String>){
         Log.e("VIEW ERROR:" ,"MARK 2")
 
