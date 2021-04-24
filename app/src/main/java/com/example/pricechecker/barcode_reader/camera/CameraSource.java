@@ -25,9 +25,11 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Build;
 import android.os.SystemClock;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.annotation.StringDef;
+
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -284,8 +286,8 @@ public class CameraSource {
     public interface AutoFocusCallback {
         /**
          * Called when
-         *
-         *
+         * <p>
+         * <p>
          * camera auto focus completes.  If the camera
          * does not support auto-focus and setAutoFocus is called,
          * onAutoFocus will be called immediately with a fake value of
@@ -326,7 +328,10 @@ public class CameraSource {
     public void release() {
         synchronized (mCameraLock) {
             stop();
-            mFrameProcessor.release();
+            if (mFrameProcessor != null) {
+
+                mFrameProcessor.release();
+            }
         }
     }
 
@@ -1094,9 +1099,11 @@ public class CameraSource {
          * Releases the underlying receiver.  This is only safe to do after the associated thread
          * has completed, which is managed in camera source's release method above.
          */
-        @SuppressLint("Assert")
+//        @SuppressLint("Assert")
         void release() {
-            assert (mProcessingThread.getState() == State.TERMINATED);
+            if(mProcessingThread != null){
+                assert (mProcessingThread.getState() == State.TERMINATED);
+            }
             mDetector.release();
             mDetector = null;
         }

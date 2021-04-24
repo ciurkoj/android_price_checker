@@ -1,6 +1,5 @@
 package com.example.pricechecker.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -33,6 +32,41 @@ class RecentFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val dummyData = hashMapOf(
+            "itemTitle" to "Ada",
+            "itemPrice" to "Lovelace",
+            "itemSource" to 1815,
+            "thumbnailUrl" to ""
+        )
+        db.collection("user_data").whereEqualTo(user.email, user.email)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    if (task.result.size() > 0) {
+                        for (document in task.result) {
+                            Log.e("FTAG", "Room already exists, start the chat")
+                        }
+                    } else {
+                        db.collection("user_data/${user.email}/recent_searches")
+                            .document("dummy")
+                            .set(dummyData)
+                            .addOnSuccessListener { documentReference ->
+                            Log.e("TAG", "DocumentSnapshot added with ID: $documentReference")
+                        }
+                            .addOnFailureListener { e ->
+                                Log.e("TAG", "Error adding document", e)
+                            }
+
+                        Log.e("FTAG", "room doesn't exist create a new room")
+
+                    }
+                } else {
+                    Log.e("FTAG", "Error getting documents: ", task.exception)
+                }
+            }
+        db.collection("user_data/${user.email}/recent_searches")
+            .document("dummy")
+            .delete()
     }
 
     override fun onCreateView(
@@ -50,14 +84,19 @@ class RecentFragment : Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    itemsArrayList.add(
-                        0, Item(
-                            document.data!!.getValue("itemTitle").toString(),
-                            document.data!!.getValue("itemPrice").toString(),
-                            document.data!!.getValue("itemSource").toString(),
-                            document.data!!.getValue("thumbnailUrl").toString()
+                    try {
+
+                        itemsArrayList.add(
+                            0, Item(
+                                document.data!!.getValue("itemTitle").toString(),
+                                document.data!!.getValue("itemPrice").toString(),
+                                document.data!!.getValue("itemSource").toString(),
+                                document.data!!.getValue("thumbnailUrl").toString()
+                            )
                         )
-                    )
+                    }catch (e: Exception){
+
+                    }
                 }
                 itemsListView.adapter = adapter
                 adapter.notifyDataSetChanged()

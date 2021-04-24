@@ -104,30 +104,30 @@ class RegisterActivity : AppCompatActivity() {
                         Log.d(TAG, "createUserWithEmail:success")
 
                         updateUI(user)
-//                    if (task.isSuccessful) {
-////                        val user = hashMapOf(
-////                            "user_name" to username.text.toString(),
-////                            "user_email" to email,
-////                            "born" to 1815
-////                        )
-//                        val user = auth.currentUser
-//
-//                        val profileUpdates = UserProfileChangeRequest.Builder().apply {
-//                            displayName = "name"
-//                        }.build()
-//                        user?.updateProfile(profileUpdates)?.addOnCompleteListener { task ->
-//                            if (task.isSuccessful) {
-//                                Log.d(TAG, "User profile updated.")
-//                            }
-//                        }
-//// Add a new document with a generated ID
-//                        db.collection("user_data").document(email)
-//                            .set(user)
-//                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-//                            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
-//                            }.addOnFailureListener { e ->
-//                                Log.w(TAG, "Error adding document", e)
-//                            }
+                    if (task.isSuccessful) {
+                        val user1 = hashMapOf(
+                            "user_name" to username.text.toString(),
+                            "user_email" to email,
+                            "born" to 1815
+                        )
+                        val user = auth.currentUser
+
+                        val profileUpdates = UserProfileChangeRequest.Builder().apply {
+                            displayName = "name"
+                        }.build()
+                        user?.updateProfile(profileUpdates)?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Log.d(TAG, "User profile updated.")
+                            }
+                        }
+// Add a new document with a generated ID
+                        db.collection("user_data").document(user.email)
+                            .set(user1)
+                            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
+                            }.addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
                         startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     } else {
@@ -138,7 +138,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
 
-    }
+    }}
 
     private fun updateUI(user: FirebaseUser?) {
 

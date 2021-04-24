@@ -206,10 +206,15 @@ public class ProductActivity extends AppCompatActivity
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
 //                                    Log.e(TAG, document.getId() + " => " + document.getData());
-                                    if(document.getData().containsValue(itemTitle)){
+
+                                    if(collection.document("dummy") !=null){
+                                        collection.document("dummy").delete();
+                                    }
+                                    if(document.getData().containsValue(itemTitle) ){
                                         Log.e(TAG, "DUPA"+document.getId() + " => " + document.getData());
                                         collection.document(document.getId()).delete();
-                                    }else {
+                                    }
+                                    else {
                                         collection.document(String.valueOf(time)).set(item);
                                     }
                                 }
