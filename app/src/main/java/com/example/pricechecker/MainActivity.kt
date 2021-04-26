@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -109,9 +110,8 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
         fTranslation.commit()
 
 
-        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
-        val logout_btn: FloatingActionButton = headerView.findViewById(R.id.logout)
-        logout_btn.setOnClickListener {
+        val navigationView = findViewById<ConstraintLayout>(R.id.logout)
+        navigationView.setOnClickListener {
             signOut()
         }
         updateNavHeader()
