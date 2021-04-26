@@ -1,6 +1,9 @@
 package com.example.pricechecker.data
 
+import android.util.Log
 import com.example.pricechecker.data.model.LoggedInUser
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -30,7 +33,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
     fun login(username: String, password: String): Result<LoggedInUser> {
         // handle login
         val result = dataSource.login(username, password)
-
+        Thread.sleep(5000)
         if (result is Result.Success) {
             setLoggedInUser(result.data)
         }

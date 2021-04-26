@@ -73,8 +73,6 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home,
-//                R.id.nav_gallery,
-//                R.id.nav_slideshow,
                 R.id.settings_activity
             ), drawerLayout
         )
@@ -183,8 +181,8 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
         val navUsername: TextView = headerView.findViewById(R.id.show_username)
         val navUserMail: TextView = headerView.findViewById(R.id.email)
 
-        navUserMail.setText(currentUser.getEmail())
-        navUsername.setText(currentUser.getDisplayName())
+        navUserMail.text = currentUser.email
+        navUsername.text = currentUser.displayName
         Log.i(TAG, "(((((((((===> ${currentUser.displayName}")
 
 

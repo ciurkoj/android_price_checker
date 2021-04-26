@@ -1,7 +1,14 @@
 package com.example.pricechecker.data
 
+import android.content.Intent
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
+import com.example.pricechecker.MainActivity
 import com.example.pricechecker.data.model.LoggedInUser
+import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
+import java.lang.Thread.sleep
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.

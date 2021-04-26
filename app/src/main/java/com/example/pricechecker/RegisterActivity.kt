@@ -76,12 +76,11 @@ class RegisterActivity : AppCompatActivity() {
             password.requestFocus()
             return
         }
-
-        Log.i("============error1", username.text.toString())
-        Log.i("============error1", username.text.toString())
-        Log.i("============error1", email.text.toString())
-        Log.i("============error1", password.text.toString())
-        Log.i("============error1", repeat_password.text.toString())
+        if (password.text.toString() != repeat_password.text.toString()) {
+            password.error = "Entered passwords don't match"
+            password.requestFocus()
+            return
+        }
 
         val email: String = email.text.toString().trim{it<=' '}
         val password: String = password.text.toString().trim{it<=' '}
@@ -107,13 +106,13 @@ class RegisterActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val user1 = hashMapOf(
                             "user_name" to username.text.toString(),
-                            "user_email" to email,
-                            "born" to 1815
+                            "user_email" to email
+
                         )
                         val user = auth.currentUser
 
                         val profileUpdates = UserProfileChangeRequest.Builder().apply {
-                            displayName = "name"
+                            displayName = username.text.toString()
                         }.build()
                         user?.updateProfile(profileUpdates)?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
@@ -128,7 +127,7 @@ class RegisterActivity : AppCompatActivity() {
                             }.addOnFailureListener { e ->
                                 Log.w(TAG, "Error adding document", e)
                             }
-                        startActivity(Intent(this, MainActivity::class.java))
+                        startActivity(Intent(this, LoginActivity::class.java))
                         finish()
                     } else {
                         Toast.makeText(baseContext, "Sign Up failed. Try again after some time.",

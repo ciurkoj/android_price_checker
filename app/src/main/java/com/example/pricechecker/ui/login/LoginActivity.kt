@@ -60,23 +60,23 @@ class LoginActivity : AppCompatActivity() {
                 username.setError("Please enter password")
                 return@setOnClickListener
             }
-            auth.signInWithEmailAndPassword(username.text.toString(), password.text.toString())
-                    .addOnCompleteListener {
-                        if(it.isSuccessful) {
-                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(this@LoginActivity, "Login failed, please try again! ", Toast.LENGTH_LONG).show()
+//            auth.signInWithEmailAndPassword(username.text.toString(), password.text.toString())
+//                    .addOnCompleteListener {
+//                        if(it.isSuccessful) {
+//                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//                            startActivity(intent)
 //                            finish()
-                        }
-                    }
+//                        } else {
+//                            Toast.makeText(this@LoginActivity, "Login failed, please try again! ", Toast.LENGTH_LONG).show()
+////                            finish()
+//                        }
+//                    }
             loading.visibility = View.VISIBLE
             loginViewModel.login(username.text.toString(), password.text.toString())
         }
-
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
                 .get(LoginViewModel::class.java)
+
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -101,6 +101,9 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
+                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                startActivity(intent)
+                finish()
             }
             setResult(Activity.RESULT_OK)
 
@@ -134,9 +137,6 @@ class LoginActivity : AppCompatActivity() {
                 false
             }
 
-//            login.setOnClickListener {
-//
-//            }
         }
     }
 
