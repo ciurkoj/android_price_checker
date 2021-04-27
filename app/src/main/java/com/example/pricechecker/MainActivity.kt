@@ -41,7 +41,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.coroutines.*
 
 
-class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener {
+class MainActivity : AppCompatActivity() {
 
 
     val adapter = ViewPagerAdapter(supportFragmentManager)
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 
         else -> {
             // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
+            // Invoke the superclass to handle it.navView.getHeaderView(0)
             super.onOptionsItemSelected(item)
         }
     }
@@ -218,27 +218,5 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
             }
         }
     }
-
-
-    override fun onScanned(barcode: Barcode?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onScannedMultiple(barcodes: MutableList<Barcode>?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onBitmapScanned(sparseArray: SparseArray<Barcode>?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onScanError(errorMessage: String?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onCameraPermissionDenied() {
-        TODO("Not yet implemented")
-    }
-
 
 }

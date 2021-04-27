@@ -60,16 +60,16 @@ public class CustomListAdapter extends ArrayAdapter<Item> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Item currentItem = (Item) getItem(position);
-        viewHolder.itemTitle.setText(currentItem.getItemTitle());
-        viewHolder.itemPrice.setText(currentItem.getItemPrice());
-        viewHolder.itemSource.setText(currentItem.getItemSource());
-        Picasso
-                .get()
-                .load(items.get(position).getThumbnailUrl())
-                .resize(250, 250)
-                .centerInside()
-                .into(viewHolder.itemImage);
+            Item currentItem = (Item) getItem(position);
+            viewHolder.itemTitle.setText(currentItem.getItemTitle());
+            viewHolder.itemPrice.setText(currentItem.getItemPrice());
+            viewHolder.itemSource.setText(currentItem.getItemSource());
+            Picasso
+                    .get()
+                    .load(items.get(position).getThumbnailUrl())
+                    .resize(250, 250)
+                    .centerInside()
+                    .into(viewHolder.itemImage);
 
 
         return convertView;

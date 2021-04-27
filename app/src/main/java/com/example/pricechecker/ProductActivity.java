@@ -193,7 +193,7 @@ public class ProductActivity extends AppCompatActivity
 
             db.collection("user_data").document(user.getEmail())
                     .collection("recent_searches").get();
-            CollectionReference collection = db.collection("user_data").document(user.getEmail())
+            CollectionReference collection = db.collection("user_data").document(user.getUid())
                     .collection("recent_searches");
 
             collection
@@ -203,14 +203,11 @@ public class ProductActivity extends AppCompatActivity
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
+//                                    Log.e(TAG, document.getId() + " => " + document.getData());
+                                    if(document.getData().containsValue(itemTitle)){
 
-                                    if(collection.document("dummy") !=null){
-                                        collection.document("dummy").delete();
-                                    }
-                                    if(document.getData().containsValue(itemTitle) ){
                                         collection.document(document.getId()).delete();
-                                    }
-                                    else {
+                                    }else {
                                         collection.document(String.valueOf(time)).set(item);
                                     }
                                 }
@@ -219,22 +216,7 @@ public class ProductActivity extends AppCompatActivity
                             }
                         }
                     });
-//            db.collection("user_data").document(user.getEmail())
-//                    .collection("recent_searches")
-//                    .document(String.valueOf(time))
-//                    .set(item)
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Log.d(TAG, "DocumentSnapshot successfully written!");
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.w(TAG, "Error writing document", e);
-//                        }
-//                    });
+
 
             //The key argument here must match that used in the other activity\
         }

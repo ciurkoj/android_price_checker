@@ -112,7 +112,7 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
                 Intent intent = new Intent(getActivity(), ProductActivity.class);
                 intent.putExtra("itemTitle", "A product");
                 intent.putExtra("itemPrice", "worthless");
-                intent.putExtra("itemSource", "from nowhere");
+                intent.putExtra("itemSource", "supermarket");
                 intent.putExtra("thumbnailUrl", "https://imgix.bustle.com/uploads/image/2021/1/14/f1499ba8-d5f9-41b0-8a21-61ba6cec190d-happy-baby-yoda.jpeg?w=1200&h=630&fit=crop&crop=faces&fm=jpg");
                 startActivity(intent);
             }
@@ -148,8 +148,6 @@ public class ScanFragment extends Fragment implements BarcodeReaderFragment.Barc
         Repository repository = new Repository();
         MainActivityViewModelFactory viewModelFactory = new MainActivityViewModelFactory(repository);
         MainActivityViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel.class);
-        HashMap<String, String> options = new HashMap();
-        options.put("google_domain", "google.co.uk");
         Map<String, String> parameters = new HashMap<>();
         parameters.put("q", barcode.displayValue);
         parameters.put("tbm", "shop");

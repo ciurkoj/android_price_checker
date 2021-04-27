@@ -25,19 +25,19 @@ class RecentFragment : Fragment() {
     private val viewModel: MainActivityViewModel by activityViewModels()
     var db = FirebaseFirestore.getInstance()
     var user = FirebaseAuth.getInstance().currentUser
-    val recent_searches = db.collection("/user_data/${user.email}/recent_searches")
+    val recent_searches = db.collection("/user_data/${user.uid}/recent_searches")
     lateinit var adapter: CustomListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val dummyData = hashMapOf(
-            "itemTitle" to "Ada",
-            "itemPrice" to "Lovelace",
-            "itemSource" to 1815,
-            "thumbnailUrl" to "thumbnailUrl"
+            "itemTitle" to "Items will appear here if you search for any",
+            "itemPrice" to "",
+            "itemSource" to "",
+            "thumbnailUrl" to "none"
         )
-        db.collection("user_data").whereEqualTo(user.email, user.email)
+        db.collection("user_data").whereEqualTo(user.email, user.uid)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -46,7 +46,7 @@ class RecentFragment : Fragment() {
                             Log.e("FTAG", "Room already exists, start the chat")
                         }
                     } else {
-                        db.collection("user_data/${user.email}/recent_searches")
+                        db.collection("user_data/${user.uid}/recent_searches")
                             .document("dummy")
                             .set(dummyData)
                             .addOnSuccessListener { documentReference ->
@@ -83,6 +83,7 @@ class RecentFragment : Fragment() {
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
+                    if(document.id =="dummy"){continue}
                     try {
 
                         itemsArrayList.add(

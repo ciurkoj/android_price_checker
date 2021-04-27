@@ -206,7 +206,21 @@ class RegisterActivity : AppCompatActivity() {
                             }.addOnFailureListener { e ->
                                 Log.w(TAG, "Error adding document", e)
                             }
-
+//                        val dummyData = hashMapOf(
+//                            "itemTitle" to "Ada",
+//                            "itemPrice" to "Lovelace",
+//                            "itemSource" to 1815,
+//                            "thumbnailUrl" to "thumbnailUrl"
+//                        )
+//                        db.collection("user_data/${user.email}/recent_searches")
+//                            .document("dummy")
+//                            .set(dummyData)
+//                            .addOnSuccessListener { documentReference ->
+//                                Log.e("TAG", "DocumentSnapshot added with ID: $documentReference")
+//                            }
+//                            .addOnFailureListener { e ->
+//                                Log.e("TAG", "Error adding document", e)
+//                            }
 //                        Firebase.auth.signOut()
 
                         startActivity(Intent(this, LoginActivity::class.java).putExtra("previousActivity", "RegisterActivity"))
@@ -221,6 +235,7 @@ class RegisterActivity : AppCompatActivity() {
 
 
     }}
+
 
     private fun updateUI(user: FirebaseUser?) {
 
