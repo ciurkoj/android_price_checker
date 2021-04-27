@@ -183,7 +183,6 @@ public class ProductActivity extends AppCompatActivity
             itemPrice = extras.getString("itemPrice");
             itemSource = extras.getString("itemSource");
             thumbnailUrl = extras.getString("thumbnailUrl");
-//            new Item(itemTitle,itemPrice,itemSource,thumbnailUrl)
 
             Map<String, Object> item = new HashMap<>();
             item.put("itemTitle", itemTitle);
@@ -191,7 +190,6 @@ public class ProductActivity extends AppCompatActivity
             item.put("itemSource", itemSource);
             item.put("thumbnailUrl", thumbnailUrl);
             long time= System.currentTimeMillis();
-            Boolean exits = false;
 
             db.collection("user_data").document(user.getEmail())
                     .collection("recent_searches").get();
@@ -205,13 +203,11 @@ public class ProductActivity extends AppCompatActivity
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    Log.e(TAG, document.getId() + " => " + document.getData());
 
                                     if(collection.document("dummy") !=null){
                                         collection.document("dummy").delete();
                                     }
                                     if(document.getData().containsValue(itemTitle) ){
-                                        Log.e(TAG, "DUPA"+document.getId() + " => " + document.getData());
                                         collection.document(document.getId()).delete();
                                     }
                                     else {

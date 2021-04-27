@@ -41,8 +41,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.coroutines.*
 
 
-class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener  {
-
+class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderListener {
 
 
     val adapter = ViewPagerAdapter(supportFragmentManager)
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     private lateinit var appBarConfiguration: AppBarConfiguration
     val db = Firebase.firestore
     val TAG = "<============>"
-    private lateinit var currentUser : FirebaseUser
+    private lateinit var currentUser: FirebaseUser
 
     private lateinit var fragmentA: ScanFragment
     private lateinit var fragmentB: ManualFragment
@@ -61,8 +60,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     private lateinit var fTranslation: FragmentTransaction
     private lateinit var fManager: FragmentManager
     lateinit var viewPager: ViewPager
-    private var storageReference = FirebaseStorage.getInstance().reference.child("images/")// = FirebaseStorage.getInstance().getReference("/images/F75eae455-7690-4f0a-93d4-84e7e60b3470?alt=media&token=d62907a0-421e-489c-9ab9-ddf213ea3534")
-    private lateinit var mainActivityViewModel: MainActivityViewModel
+    private var storageReference = FirebaseStorage.getInstance().reference.child("images/")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +70,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 //        setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_main)
         viewPager = findViewById(R.id.viewPager)
-        currentUser =Firebase.auth.currentUser
+        currentUser = Firebase.auth.currentUser
 
 //        currentUser = Firebase.auth.currentUser
 //        val currentUser = Firebase.auth.currentUser
@@ -90,11 +88,9 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
             ), drawerLayout
         )
 
-        val headerView = navView.getHeaderView(0)
-        val profile_pic: ImageView = headerView.findViewById(R.id.profile_pic)
 
-        if(intent.getStringExtra("previousActivity").equals("LoginActivity")){
-            Log.e("taggg","duuupa")
+        if (intent.getStringExtra("previousActivity").equals("LoginActivity")) {
+
             startActivity(Intent(this@MainActivity, MainActivity::class.java))
         }
 
@@ -135,7 +131,7 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
 
     }
 
-    fun refreshManual(){
+    fun refreshManual() {
         fragmentA = ScanFragment()
         fragmentB = ManualFragment()
         supportFragmentManager.beginTransaction()
@@ -198,27 +194,29 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     }
 
     private fun updateNavHeader() {
-//        val navigationView = findViewById<View>(R.id.nav_view) as NavigationView
-        val headerView = navView.getHeaderView(0)
-        val navUsername: TextView = headerView.findViewById(R.id.show_username)
-        val navUserMail: TextView = headerView.findViewById(R.id.email)
-        val profile_pic: ImageView = headerView.findViewById(R.id.profile_pic)
+        val navUsername: TextView = navView.getHeaderView(0).findViewById(R.id.show_username)
+        val navUserMail: TextView = navView.getHeaderView(0).findViewById(R.id.email)
+        val profilePic: ImageView = navView.getHeaderView(0).findViewById(R.id.profile_pic)
         navUserMail.text = currentUser.email
         navUsername.text = currentUser.displayName
 
-            storageReference.child(currentUser.uid).downloadUrl.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    GlideApp.with(this@MainActivity)
-                        .load(task.result)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(profile_pic)
-                } else {
-                    Toast.makeText(this@MainActivity, task.exception?.message, Toast.LENGTH_SHORT)
-                        .show()
-                    Log.e("Firebase id", currentUser.uid)
-                }
-            }
 
+        storageReference.child(currentUser.uid).downloadUrl.addOnCompleteListener { task ->
+            task.addOnSuccessListener {
+                GlideApp.with(this@MainActivity)
+                    .load(task.result)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(profilePic)
+            }
+            task.addOnFailureListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Profile picture: " + task.exception?.message,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        }
     }
 
 
@@ -241,10 +239,6 @@ class MainActivity : AppCompatActivity(), BarcodeReaderFragment.BarcodeReaderLis
     override fun onCameraPermissionDenied() {
         TODO("Not yet implemented")
     }
-
-
-
-
 
 
 }

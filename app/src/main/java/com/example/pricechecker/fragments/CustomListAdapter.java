@@ -28,7 +28,6 @@ public class CustomListAdapter extends ArrayAdapter<Item> {
     }
 
 
-
     @Override
     public int getCount() {
         return items.size(); //returns total item in the list
@@ -73,7 +72,6 @@ public class CustomListAdapter extends ArrayAdapter<Item> {
                 .into(viewHolder.itemImage);
 
 
-
         return convertView;
     }
 
@@ -85,7 +83,7 @@ public class CustomListAdapter extends ArrayAdapter<Item> {
         ImageView itemImage;
 
         public ViewHolder(View view) {
-            itemTitle = (TextView)view.findViewById(R.id.item_title);
+            itemTitle = (TextView) view.findViewById(R.id.item_title);
             itemPrice = (TextView) view.findViewById(R.id.item_price);
             itemSource = (TextView) view.findViewById(R.id.item_source);
             itemImage = (ImageView) view.findViewById(R.id.item_thumbnail);

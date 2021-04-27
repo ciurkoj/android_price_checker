@@ -27,7 +27,6 @@ class RecentFragment : Fragment() {
     var user = FirebaseAuth.getInstance().currentUser
     val recent_searches = db.collection("/user_data/${user.email}/recent_searches")
     lateinit var adapter: CustomListAdapter
-//    lateinit var itemsListView: ListView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +35,7 @@ class RecentFragment : Fragment() {
             "itemTitle" to "Ada",
             "itemPrice" to "Lovelace",
             "itemSource" to 1815,
-            "thumbnailUrl" to ""
+            "thumbnailUrl" to "thumbnailUrl"
         )
         db.collection("user_data").whereEqualTo(user.email, user.email)
             .get()

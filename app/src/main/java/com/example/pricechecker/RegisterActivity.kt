@@ -43,19 +43,15 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        Log.i("============error1", "=========================>")
         auth = FirebaseAuth.getInstance()
         firebaseStore = FirebaseStorage.getInstance()
         storageReference = FirebaseStorage.getInstance().reference
 
-//        register.setOnClickListener{
-//            signUpUser()
-////        }
+
         register.setOnClickListener {
            signUpUser()
         }
-//
-//        setSupportActionBar(findViewById(R.id.toolbar))
+
 
         val actionBar = supportActionBar
         if (actionBar != null) {
@@ -87,8 +83,7 @@ class RegisterActivity : AppCompatActivity() {
 
             selectphoto_button_register.alpha = 0f
 
-//      val bitmapDrawable = BitmapDrawable(bitmap)
-//      selectphoto_button_register.setBackgroundDrawable(bitmapDrawable)
+
         }
     }
     private fun uploadImageToFirebaseStorage() {

@@ -24,8 +24,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-
-
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         auth.signInWithEmailAndPassword(username, password)
@@ -35,17 +33,9 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
                         LoginResult(success = LoggedInUserView(displayName = auth.currentUser.email))
                 } else {
                     _loginResult.value = LoginResult(error = R.string.login_failed)
-//                            finish()
                 }
             }
-//        val result = loginRepository.login(username, password)
-////        Log.e("duuupa","auth.toString()")
-//        if (result is Result.Success) {
-//            _loginResult.value =
-//                LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
-//        } else {
-//            _loginResult.value = LoginResult(error = R.string.login_failed)
-//        }
+
     }
 
     fun loginDataChanged(username: String, password: String) {

@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var loginViewModel: LoginViewModel
     lateinit var auth: FirebaseAuth
-    public var x = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -41,40 +41,26 @@ class LoginActivity : AppCompatActivity() {
 
         signup.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
-//            startActivity(intent)
-//            finish()
         }
         if (auth.currentUser != null && intent.getStringExtra("previousActivity") != "RegisterActivity") {
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-//            startActivity(intent)
-//            finish()
+
         }
         login.setOnClickListener {
 
-            if(TextUtils.isEmpty(username.text.toString())){
+            if (TextUtils.isEmpty(username.text.toString())) {
                 username.setError("Please enter username")
                 return@setOnClickListener
-            }
-            else if(TextUtils.isEmpty(password.text.toString())){
+            } else if (TextUtils.isEmpty(password.text.toString())) {
                 username.setError("Please enter password")
                 return@setOnClickListener
             }
-//            auth.signInWithEmailAndPassword(username.text.toString(), password.text.toString())
-//                    .addOnCompleteListener {
-//                        if(it.isSuccessful) {
-//                            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-//                            startActivity(intent)
-//                            finish()
-//                        } else {
-//                            Toast.makeText(this@LoginActivity, "Login failed, please try again! ", Toast.LENGTH_LONG).show()
-////                            finish()
-//                        }
-//                    }
+
             loading.visibility = View.VISIBLE
             loginViewModel.login(username.text.toString(), password.text.toString())
         }
         loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-                .get(LoginViewModel::class.java)
+            .get(LoginViewModel::class.java)
 
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -100,13 +86,17 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
-                startActivity(Intent(this@LoginActivity, MainActivity::class.java).putExtra("previousActivity","LoginActivity"))
+                startActivity(
+                    Intent(
+                        this@LoginActivity,
+                        MainActivity::class.java
+                    ).putExtra("previousActivity", "LoginActivity")
+                )
                 finish()
             }
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
-//            finish()
         })
 
         username.afterTextChanged {
@@ -141,10 +131,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
         val displayName = model.displayName
-        // TODO : initiate successful logged in experience
-//        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-//        startActivity(intent)
-//        finish()
+
         Toast.makeText(
             applicationContext,
             "$welcome $displayName",
