@@ -1,5 +1,12 @@
 package com.example.pricechecker.model
 
+
+/**
+ **Shopping Results contains Serp API Json response for shopping response object.
+ **It helps to deserialiaze the object and display in a List View.
+ **/
+
+
 data class ShoppingResults(
     private val position: Int,
     private val title: String,

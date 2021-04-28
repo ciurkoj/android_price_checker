@@ -44,7 +44,6 @@ class LoginActivity : AppCompatActivity() {
         }
         if (auth.currentUser != null && intent.getStringExtra("previousActivity") != "RegisterActivity") {
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-
         }
         login.setOnClickListener {
 

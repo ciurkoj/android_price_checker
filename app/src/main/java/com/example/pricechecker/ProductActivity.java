@@ -191,11 +191,9 @@ public class ProductActivity extends AppCompatActivity
             item.put("thumbnailUrl", thumbnailUrl);
             long time= System.currentTimeMillis();
 
-            db.collection("user_data").document(user.getEmail())
-                    .collection("recent_searches").get();
+
             CollectionReference collection = db.collection("user_data").document(user.getUid())
                     .collection("recent_searches");
-
             collection
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

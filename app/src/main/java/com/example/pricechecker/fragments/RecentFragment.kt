@@ -43,7 +43,6 @@ class RecentFragment : Fragment() {
                 if (task.isSuccessful) {
                     if (task.result.size() > 0) {
                         for (document in task.result) {
-                            Log.e("FTAG", "Room already exists, start the chat")
                         }
                     } else {
                         db.collection("user_data/${user.uid}/recent_searches")
@@ -55,9 +54,6 @@ class RecentFragment : Fragment() {
                             .addOnFailureListener { e ->
                                 Log.e("TAG", "Error adding document", e)
                             }
-
-                        Log.e("FTAG", "room doesn't exist create a new room")
-
                     }
                 } else {
                     Log.e("FTAG", "Error getting documents: ", task.exception)
