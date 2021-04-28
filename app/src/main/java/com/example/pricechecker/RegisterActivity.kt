@@ -15,7 +15,6 @@ import com.google.firebase.auth.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.coroutines.*
 import java.util.*
@@ -162,8 +161,9 @@ class RegisterActivity : AppCompatActivity() {
                             } catch (existEmail: FirebaseAuthUserCollisionException) {
                                 Toast.makeText(
                                     baseContext, existEmail.message,
-                                    Toast.LENGTH_SHORT
+                                    Toast.LENGTH_LONG
                                 ).show()
+                                Log.e(TAG,existEmail.message.toString())
                             } catch (e: java.lang.Exception) {
                                 Log.e(TAG, "onComplete: " + e.message)
                             }
