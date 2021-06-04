@@ -18,5 +18,4 @@ import static com.example.pricechecker.util.Constants.API_KEY;
 public interface JsonPlaceHolderApi {
     @GET("search.json?engine=google&api_key="+ API_KEY)
     Call<JsonObject> getPosts(@QueryMap Map<String, String> parameters);
-
 }

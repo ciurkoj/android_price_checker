@@ -111,12 +111,9 @@ class ManualFragment : Fragment(), OnQueryTextListener {
         itemsArrayList.clear()
         adapter = CustomListAdapter(context, itemsArrayList)
         adapter.notifyDataSetChanged()
-//        TODO("Not yet implemented")
         itemsListView = requireView().findViewById<ListView>(R.id.searchResultsView)
         val searchBar = view?.findViewById<SearchView>(R.id.searchView)
         searchBar!!.setQuery(query, false)
-//        val View1 = view?.findViewById<View>(R.id.manual_list_view)
-//        View1?.isVisible = false
         itemsListView.clearFocus()
         swipeRefreshLayout.isRefreshing = true
         val options: HashMap<String, String> = HashMap()
@@ -124,12 +121,10 @@ class ManualFragment : Fragment(), OnQueryTextListener {
         options["google_domain"] = "google.co.uk"
         options["gl"]="uk"
         options["hl"]="en"
-//        options["device"] = "desktop"
         options["tbm"] = "shop"
         options["no_cache"] = "true"
         options["tbs"] = "local_avail:1"
         options["location"] ="West Midlands, England, United Kingdom"
-//        itemsArrayList = mutableListOf<Item>() as ArrayList<Item>
         val retrofit = Retrofit.Builder()
             .baseUrl("https://serpapi.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -177,45 +172,6 @@ class ManualFragment : Fragment(), OnQueryTextListener {
             }
         })
         adapter.notifyDataSetChanged()
-
-//        val repository = Repository()
-//        val viewModelFactory = MainActivityViewModelFactory(repository)
-//        viewModel = ViewModelProvider(this, viewModelFactory).get(MainActivityViewModel::class.java)
-//        viewModel.getCustomQuery(query, options)
-//        viewModel.myResponse.observe(viewLifecycleOwner, Observer { response ->
-//            if (response.isSuccessful) {
-//
-//                Log.e("dsasddasds", response.toString())
-//                val gson = Gson()
-//                val type = object : TypeToken<BodyResponse?>() {}.type
-//                val searchResponse: BodyResponse =
-//                    gson.fromJson<BodyResponse>(response.body(), type)
-////                Thread.sleep(1000)
-//                try {
-//                    for (result in searchResponse.shopping_results) {
-//                        itemsArrayList.add(
-//                            Item(
-//                                result.resultTitle,
-//                                result.resultPrice,
-//                                result.resultSource,
-//                                result.resultThumbnail
-//                            )
-//                        )
-//                    }
-//                    adapter.notifyDataSetChanged()
-//                    swipeRefreshLayout.isRefreshing = false
-//                } catch (e: Exception) {
-//                }
-//            } else {
-//                Toast.makeText(
-//                    activity,
-//                    "Sorry, couldn't recognize the code. Please try again or use manual search",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                Log.d("Response Error: ", response.errorBody().toString())
-//            }
-//            adapter.notifyDataSetChanged()
-//        })
         return true
     }
 

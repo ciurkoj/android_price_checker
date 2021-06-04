@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.pricechecker.api.RetrofitInstance
 import com.example.pricechecker.fragments.Item
+import com.example.pricechecker.model.Location
 import com.google.gson.JsonObject
 import retrofit2.Response
 
@@ -31,4 +32,7 @@ class Repository {
         return RetrofitInstance.api.getCustomQuery(query, options)
     }
 
+    suspend fun getLocation() : Response<ArrayList<Location>> {
+        return RetrofitInstance.locationApi.getLocation()
+    }
 }

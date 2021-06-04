@@ -63,21 +63,22 @@
     <string name="default_info_title">Default Info Title</string>
     <string name="default_info_snippet">Default Info Snippet</string>
     <string name="pick_place">Pick place</string>
-    <string-array name="items_name">
-        <item>MacBook Pro</item>
-        <item>Alienware</item>
-        <item>Sony play station 4</item>
-        <item>Xbox One</item>
-        <item>Google glass</item>
-        <item>Google Nexus 6</item>
+    <string-array name="countries">
+        <item>Afghanistan</item>
+        <item>Albania</item>
+        <item>Algeria</item>
+        <item>Andorra</item>
+        <item>Angola</item>
     </string-array>
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
 
-    <string-array name="item_description">
-        <item>MacBook pro with new graphics and faster flash storage.</item>
-        <item>High performance computer gaming system.</item>
-        <item>PS4 console, the most immersive gaming experience ever.</item>
-        <item>Best games, multi-player and entertainment.</item>
-        <item>Optical head mounted display</item>
-        <item>Motorolla Nexus x</item>
-    </string-array>
+    <string name="no_location_detected">
+        No location detected. Make sure location is enabled on the device.
+    </string>
+
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
+    <string name="settings">Settings</string>
 </resources>

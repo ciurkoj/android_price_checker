@@ -1,5 +1,6 @@
 package com.example.pricechecker.api
 
+import com.example.pricechecker.model.Location
 import com.example.pricechecker.model.SerpApiQuery
 import com.example.pricechecker.util.Constants.Companion.API_KEY
 import com.google.gson.Gson
@@ -20,5 +21,9 @@ interface SerpAPI {
         @Query("q") query: String,
         @QueryMap options: Map<String, String>
     ): Response<JsonObject>
+
+    @GET("/location.json")
+    suspend fun getLocation(): Response<ArrayList<Location>>
+
 
 }

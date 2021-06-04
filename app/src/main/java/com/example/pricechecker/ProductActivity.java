@@ -74,14 +74,21 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,8 +119,9 @@ public class ProductActivity extends AppCompatActivity
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
-    private static final int DEFAULT_ZOOM = 12;
+    private final LatLng defaultLocation = new LatLng(50.736129,-1.988229);
+    private static final int DEFAULT_ZOOM = 6;
+    private static final int FOUND_LOCATION_ZOOM = 14;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean locationPermissionGranted;
 
@@ -218,8 +226,56 @@ public class ProductActivity extends AppCompatActivity
 
             //The key argument here must match that used in the other activity\
         }
-        Toast.makeText(this, "Please wait while map is being loaded...", Toast.LENGTH_LONG).show();
 
+
+        Toast.makeText(this, "Please wait while map is being loaded...", Toast.LENGTH_LONG).show();
+        String mylocation = "Coventry,England,United Kingdom";
+        String encodedString = Base64.getEncoder().encodeToString(mylocation.getBytes());
+        String chara = "f";
+        byte[] decodedBytes = Base64.getMimeDecoder().decode(String.valueOf(mylocation.length()));
+        String decodedString = new String(decodedBytes);
+        Log.e("=======================>", decodedString);
+        Log.e("=======================>", encodedString);
+        String url = null;
+        String url1 = null;
+        try {
+            url =  URLEncoder.encode(encodedString, "UTF-8");
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Log.e("=======================url>", url);
+        // base URL
+        String urlStr = "V2VzdCBOZXcgWW9yayxOZXcgSmVyc2V5LFVuaXRlZCBTdGF0ZXM=";
+
+//        // String to be encoded
+//        String query1 = "u@geeks for geeks";
+//
+//        System.out.println("URL without encoding :");
+//        URL url = null;
+//        try {
+//            url = new URL(urlStr + query1);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(url);
+//
+//        // encode() method
+//        System.out.println("URL after encoding :");
+//        try {
+//            url = new URL(urlStr + URLEncoder.encode(query1, "UTF-8"));
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(url);
+        try {
+            Log.e("=======================>", URLEncoder.encode(urlStr, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String location = "w+CAIQICIm" + url;
         List<String> query = Arrays.asList(itemTitle.split(" "));
         List<String> subList = query.subList(0, query.size() - 2);
         Map<String, String> parameter = new HashMap<>();
@@ -227,7 +283,7 @@ public class ProductActivity extends AppCompatActivity
         parameter.put("google_domain", "google.co.uk");
         parameter.put("gl", "uk");
         parameter.put("hl", "en");
-        parameter.put("location", "coventry, england, united kingdom");
+        parameter.put("location", location); //lastKnownLocation.getLatitude()
         parameter.put("tbm", "lcl");
         parameter.put("num", "50");
         parameter.put("device", "desktop");
@@ -284,7 +340,6 @@ public class ProductActivity extends AppCompatActivity
                 .centerInside()
                 .into(image1);
     }
-
 
     // [END maps_current_place_on_create]
 
@@ -404,7 +459,7 @@ public class ProductActivity extends AppCompatActivity
                             if (lastKnownLocation != null) {
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(lastKnownLocation.getLatitude(),
-                                                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                                                lastKnownLocation.getLongitude()), FOUND_LOCATION_ZOOM));
                             }
                         } else {
                             Log.d(TAG, "Current location is null. Using defaults.");

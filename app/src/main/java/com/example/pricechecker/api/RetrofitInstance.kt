@@ -20,4 +20,7 @@ object RetrofitInstance {
         retrofit.create(SerpAPI::class.java)
 
     }
+    val locationApi : SerpAPI by lazy{
+        retrofit.create(SerpAPI::class.java)
+    }
 }
