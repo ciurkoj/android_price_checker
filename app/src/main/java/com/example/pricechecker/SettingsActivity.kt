@@ -49,9 +49,11 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private var currentLocationText: TextView? = null
     private val AUTOCOMPLETE_REQUEST_CODE = 1
     private lateinit var viewModel: SettingsViewModel
-    private var full_list_auto_complete: MutableList<MyLocation> = ArrayList<MyLocation>()
-
+    private var full_list_auto_complete: MutableList<MyLocation> = ArrayList()
+    var list_auto_complete: MutableList<String> = ArrayList()
+    var listView: ListView? = null
     lateinit var aAdapter: ArrayAdapter<String>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,8 +64,10 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 .replace(R.id.settings_activity, SettingsFragment())
                 .commit()
         }
+        val sharedPref = getSharedPreferences("UserSettings", MODE_PRIVATE)
+        val editor = sharedPref.edit()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        listView = findViewById<ListView>(R.id.listViewSettings)
         mLatitudeLabel = resources.getString(R.string.latitude_label)
         mLongitudeLabel = resources.getString(R.string.longitude_label)
         mLatitudeText = findViewById<View>(R.id.latitude_text) as TextView
@@ -71,21 +75,34 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         Log.e("=========================>", "dddddddddddddddd")
         currentLocationText = findViewById(R.id.current_location_text)
+        val savedLocation=sharedPref.getString("current_location", "Current location: ")
+        currentLocationText!!.text =savedLocation
+        val savedLongtitude =sharedPref.getString("mLongtitude","$mLongitudeLabel: ")
+        mLongitudeText!!.text = savedLongtitude
+        val savedLatitude = sharedPref.getString("mLatitude","$mLatitudeLabel: ")
+        mLatitudeText!!.text = savedLatitude
+        Log.e("=========>", "$savedLocation, $savedLongtitude, $savedLatitude")
         val button = findViewById<ImageButton>(R.id.imageButton)
-        button.setOnClickListener{
+        button.setOnClickListener {
             getLastLocation()
+            editor.apply {
+                currentLocationText?.text = "Current location: Custom GPS coordinates"
+                putString("current_location", currentLocationText?.text as String?)
+                putString("mLongtitude", "${mLongitudeText!!.text}")
+                putString("mLatitude", "${mLatitudeText!!.text}")
+                apply()
+            }
         }
         viewModel = ViewModelProvider(this, viewModelFactory).get(SettingsViewModel::class.java)
         val searchViewSettings = findViewById<SearchView>(R.id.searchViewSettings)
-        val listView = findViewById<ListView>(R.id.listViewSettings)
-        var list_auto_complete: MutableList<String> = ArrayList()
 
-        aAdapter = ArrayAdapter<String>(this@SettingsActivity,
+        aAdapter = ArrayAdapter<String>(
+            this@SettingsActivity,
             R.layout.custom_list_item, R.id.text_view_list_item, list_auto_complete
         )
         searchViewSettings.queryHint = "Set a location..."
         searchViewSettings.requestFocusFromTouch();
-        searchViewSettings.setOnClickListener  {
+        searchViewSettings.setOnClickListener {
             searchViewSettings.requestFocus();
             searchViewSettings.setIconified(false);
             Log.e("dccsadafdsaf", "clicked")
@@ -94,69 +111,88 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             // hide soft keyboard on rot layout click
             // it hide soft keyboard on edit text outside root layout click
             hideSoftKeyboard()
-
             // remove focus from edit text
             searchViewSettings.clearFocus()
         }
-        listView.bringToFront()
+        listView?.bringToFront()
         searchViewSettings.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchViewSettings.clearFocus()
-
-                viewModel.getCustomLocation(query.toString(), 5)
-                viewModel.myCustomLocation.observe(this@SettingsActivity, Observer { response ->
-                    Log.e("=======>", response.toString())
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-//                                myAdapter.setData(it)
-                            list_auto_complete.clear()
-                            aAdapter = ArrayAdapter<String>(this@SettingsActivity,
-                                R.layout.custom_list_item, R.id.text_view_list_item, list_auto_complete
-                            )
-                            aAdapter.notifyDataSetChanged()
-                            listView.adapter = aAdapter
-                            aAdapter.clear()
-                            for (item in it) {
-                                full_list_auto_complete.add(MyLocation( item.name, item.canonical_name, item.gps))
-                                aAdapter.add(item.canonical_name)
-                            }
-                            aAdapter.notifyDataSetChanged()
-                        }
-
-                    } else {
-                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                })
-
+                if (query != null) {
+                    findLocationRequest(query)
+                }
                 aAdapter.clear()
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText?.length!! > 3) {
+                    findLocationRequest(newText)
+
+                }
                 return true
             }
         })
-        listView.onItemClickListener =
+        listView?.onItemClickListener =
             OnItemClickListener { adapter, _, position, _ ->
                 val value = adapter.getItemAtPosition(position) as String
-                searchViewSettings.setQuery(value, false)
-
-                val found =full_list_auto_complete.firstOrNull{it.canonical_name == value}
+                searchViewSettings.clearFocus()
+                val found = full_list_auto_complete.firstOrNull { it.canonical_name == value }
                 if (found != null) {
                     currentLocationText?.text = "Current location: ${found.canonical_name}"
                     mLongitudeText?.text = "$mLongitudeLabel: ${found.gps[0]}"
                     mLatitudeText?.text = "$mLatitudeLabel: ${found.gps[1]}"
-
+                    editor.apply {
+                        putString("current_location", "Current location: ${found.canonical_name}")
+                        putString("mLongtitude", "$mLongitudeLabel: ${found.gps[0]}")
+                        putString("mLatitude", "$mLatitudeLabel: ${found.gps[1]}")
+                        apply()
+                    }
                 }
                 full_list_auto_complete.clear()
-
-                listView.adapter = null
+                aAdapter.clear()
+                listView?.adapter = null
             }
+    }
+
+    fun findLocationRequest(query: String): Boolean {
+        viewModel.getCustomLocation(query, 5)
+        viewModel.myCustomLocation.observe(this@SettingsActivity, Observer { response ->
+            Log.e("=======>", response.toString())
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    list_auto_complete.clear()
+                    aAdapter = ArrayAdapter<String>(
+                        this@SettingsActivity,
+                        R.layout.custom_list_item,
+                        R.id.text_view_list_item,
+                        list_auto_complete
+                    )
+                    aAdapter.notifyDataSetChanged()
+                    listView?.adapter = aAdapter
+                    aAdapter.clear()
+                    for (item in it) {
+                        full_list_auto_complete.add(
+                            MyLocation(
+                                item.name,
+                                item.canonical_name,
+                                item.gps
+                            )
+                        )
+                        aAdapter.add(item.canonical_name)
+                    }
+                    aAdapter.notifyDataSetChanged()
+                }
+            } else {
+                Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+        return true
 
     }
 
-    fun Activity.hideSoftKeyboard(){
+    fun Activity.hideSoftKeyboard() {
         (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).apply {
             hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         }
@@ -188,8 +224,6 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
 
-
-
     public override fun onStart() {
         super.onStart()
         searchViewSettings.isIconifiedByDefault = false
@@ -199,15 +233,13 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         if (!checkPermissions()) {
             requestPermissions()
         } else {
-            getLastLocation()
+//            getLastLocation()
         }
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
-
         }
     }
 
@@ -355,7 +387,6 @@ class SettingsActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onQueryTextChange(newText: String?): Boolean {
         return true
     }
-
 
 
 }
